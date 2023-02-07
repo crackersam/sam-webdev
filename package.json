@@ -5,18 +5,23 @@
   "main": "Server.js",
   "scripts": {
     "start": "node ./backend/Server",
-    "server": "nodemon ./backend/Server"
+    "server": "nodemon ./backend/Server",
+    "client": "npm start --prefix ./frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.20"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.1"
   }
 }
