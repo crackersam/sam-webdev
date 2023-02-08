@@ -1,0 +1,20 @@
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  gap: 3.2rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .menu-icon {
+    display: none;
+  }
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+  }
+}
