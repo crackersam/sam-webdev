@@ -19,8 +19,10 @@ const createUser = asyncHandler(async (req, res) => {
   }
 
   const token = await user.generateAuthToken();
+
   res.status(201).json({
-    user,
+    name: user.name,
+    email: user.email,
     token,
   });
 });
@@ -28,12 +30,13 @@ const createUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findByCredentials(req.body.email, req.body.password);
   const token = await user.generateAuthToken();
-  res.status(200).json({ user, token });
+  res.status(200).json({ ...user, token });
 });
 
 const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  res.status(200).json({ user });
+  const { name, email } = user;
+  res.status(200).json({ name, email });
 });
 
 module.exports = {

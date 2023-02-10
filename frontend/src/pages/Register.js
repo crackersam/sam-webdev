@@ -14,7 +14,7 @@ const Register = () => {
   const { name, email, password, confirmPassword } = fields;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, isSuccess, errorMessage } = useSelector(
+  const { token, isError, isSuccess, errorMessage } = useSelector(
     (state) => state.auth
   );
 
@@ -23,12 +23,16 @@ const Register = () => {
       toast.error(errorMessage);
     }
 
-    if (isSuccess || user) {
+    if (isSuccess) {
       toast.success("Registration successful");
       dispatch(reset());
       navigate("/");
     }
-  }, [isError, errorMessage, isSuccess, user]);
+
+    if (token) {
+      navigate("/");
+    }
+  }, [isError, errorMessage, isSuccess, token, dispatch, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
