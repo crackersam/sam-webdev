@@ -1,10 +1,14 @@
 const express = require("express");
+// import cookie-parser
+const cookieParser = require("cookie-parser");
 const { errorHandler } = require("./middleware/ErrorHandlerMiddleware");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const app = express();
 
 connectDB();
+
+app.use(cookieParser());
 
 app.use(express.json());
 

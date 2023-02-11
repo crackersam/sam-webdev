@@ -14,7 +14,7 @@ const Register = () => {
   const { name, email, password, confirmPassword } = fields;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { token, isError, isSuccess, errorMessage } = useSelector(
+  const { isError, isSuccess, errorMessage } = useSelector(
     (state) => state.auth
   );
 
@@ -28,11 +28,10 @@ const Register = () => {
       dispatch(reset());
       navigate("/");
     }
-
-    if (token) {
+    if (document.cookie) {
       navigate("/");
     }
-  }, [isError, errorMessage, isSuccess, token, dispatch, navigate]);
+  }, [isError, errorMessage, isSuccess, dispatch, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,7 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../features/auth/AuthSlice";
 
 const Login = () => {
   const [fields, setFields] = React.useState({
@@ -25,7 +24,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const user = { email, password };
-    dispatch(login(user));
+    dispatch();
   };
   return (
     <>

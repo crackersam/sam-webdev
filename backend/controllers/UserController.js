@@ -4,6 +4,7 @@ const User = require("../models/UserModel");
 
 const createUser = asyncHandler(async (req, res) => {
   const user = new User(req.body);
+
   try {
     await user.save();
   } catch (err) {
@@ -20,10 +21,16 @@ const createUser = asyncHandler(async (req, res) => {
 
   const token = await user.generateAuthToken();
 
+  // 30 days in milliseconds
+  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  // Set cookie
+  res.cookie("token", token, { expires, httpOnly: true });
+  // set verification cookie
+  res.cookie("verified", user.verified, { expires, httpOnly: false });
+
   res.status(201).json({
     name: user.name,
     email: user.email,
-    token,
   });
 });
 
