@@ -6,7 +6,13 @@
   padding: 0 1rem;
   justify-content: space-between;
 }
-.big-navigation {
+.main-header__title {
+}
+.main-header__title-link {
+  color: #000;
+  text-decoration: none;
+}
+.main-header__navigation {
   display: none;
   justify-content: space-between;
 }
@@ -15,10 +21,7 @@
   .menu-icon {
     display: none;
   }
-  .main-nav {
-    display: inline;
-  }
-  .big-navigation {
+  .main-header__navigation {
     display: flex;
   }
   .main-header {

@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 import "./NavLinks.css";
 
 const MainNavigation = () => {
-  return (
-    <ul className="nav-links">
+  const links = !document.cookie ? (
+    <>
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
@@ -18,8 +18,16 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/contact">Contact</NavLink>
       </li>
-    </ul>
+    </>
+  ) : (
+    <>
+      <li>
+        <NavLink to="/protected">Protected</NavLink>
+      </li>
+    </>
   );
+
+  return <ul className="nav-links">{links}</ul>;
 };
 
 export default MainNavigation;

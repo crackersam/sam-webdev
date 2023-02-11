@@ -1,12 +1,17 @@
 import React from "react";
 import NavLinks from "./NavLinks";
 import "./Header.css";
+import { Link } from "react-router-dom";
+
+import "./Header.css";
 
 const Header = ({ drawerIsOpen, setDrawerIsOpen }) => {
   return (
     <header className="main-header">
-      <h1>Sam Ames - Web Developer</h1>
-      <nav className="big-navigation">
+      <Link to="/" className="main-header__title-link">
+        <h1 className="main-header__title">Sam Ames - Web Developer</h1>
+      </Link>
+      <nav className="main-header__navigation">
         <NavLinks />
       </nav>
 
