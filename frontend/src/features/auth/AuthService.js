@@ -7,6 +7,13 @@ const register = async (regData) => {
   return response.data;
 };
 
+const logout = async () => {
+  const response = await axios.get(API_URL + "logout", {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 const getProfile = async () => {
   const response = await axios.get(API_URL + "me", { withCredentials: true });
   return response.data;
@@ -15,6 +22,7 @@ const getProfile = async () => {
 const authService = {
   register,
   getProfile,
+  logout,
 };
 
 export default authService;

@@ -40,6 +40,22 @@ const loginUser = asyncHandler(async (req, res) => {
   res.status(200).json({ ...user, token });
 });
 
+const logoutUser = asyncHandler(async (req, res) => {
+  // get token from cookie called token
+  const token = req.cookies.token;
+  res.clearCookie("token");
+  res.clearCookie("verified");
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== token;
+    });
+    await req.user.save();
+    res.status(200).send("Logged out");
+  } catch (err) {
+    res.status(400).send("Error logging out");
+  }
+});
+
 const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   const { name, email } = user;
@@ -49,5 +65,6 @@ const getMe = asyncHandler(async (req, res) => {
 module.exports = {
   createUser,
   loginUser,
+  logoutUser,
   getMe,
 };

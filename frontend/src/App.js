@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Protector from "./components/Protector";
 import Protected from "./components/Protected";
+import Logout from "./components/Logout";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route element={<Protector />}>
             <Route path="/protected" element={<Protected />} />
+            <Route path="/logout" element={<Logout />} />
           </Route>
         </Routes>
       </Router>

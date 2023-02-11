@@ -24,6 +24,9 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/protected">Protected</NavLink>
       </li>
+      <li>
+        <NavLink to="/logout">Logout</NavLink>
+      </li>
     </>
   );
 
