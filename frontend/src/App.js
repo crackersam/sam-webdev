@@ -16,6 +16,8 @@ import { getProfile, reset } from "./features/auth/AuthSlice";
 import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import Protector from "./components/Protector";
+import Protected from "./components/Protected";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
@@ -27,7 +29,6 @@ const App = () => {
     if (document.cookie) {
       dispatch(getProfile()).then(() => dispatch(reset()));
     }
-
     console.log("cookie check");
   }, []);
 
@@ -43,6 +44,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route element={<Protector />}>
+            <Route path="/protected" element={<Protected />} />
+          </Route>
         </Routes>
       </Router>
       <ToastContainer />
