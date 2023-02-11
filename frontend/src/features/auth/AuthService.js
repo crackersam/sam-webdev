@@ -24,11 +24,23 @@ const getProfile = async () => {
   return response.data;
 };
 
+const resetPassword = async (email) => {
+  const response = await axios.post(API_URL + "reset-password", email);
+  return response.data;
+};
+
+const verifyEmail = async (verificationToken) => {
+  const response = await axios.get(API_URL + "verify/" + verificationToken);
+  return response.data;
+};
+
 const authService = {
   register,
   getProfile,
   logout,
   login,
+  resetPassword,
+  verifyEmail,
 };
 
 export default authService;

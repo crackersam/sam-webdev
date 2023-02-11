@@ -27,6 +27,15 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Please add a password"],
     },
+    verificationToken: {
+      type: String,
+    },
+    resetToken: {
+      type: String,
+    },
+    resetTokenExpiration: {
+      type: Date,
+    },
     tokens: [
       {
         token: {
