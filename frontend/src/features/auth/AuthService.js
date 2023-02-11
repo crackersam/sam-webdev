@@ -29,6 +29,14 @@ const resetPassword = async (email) => {
   return response.data;
 };
 
+const setNewPassword = async (resetToken, password) => {
+  const response = await axios.post(
+    API_URL + "reset-password/" + resetToken,
+    password
+  );
+  return response.data;
+};
+
 const verifyEmail = async (verificationToken) => {
   const response = await axios.get(API_URL + "verify/" + verificationToken);
   return response.data;
@@ -41,6 +49,7 @@ const authService = {
   login,
   resetPassword,
   verifyEmail,
+  setNewPassword,
 };
 
 export default authService;

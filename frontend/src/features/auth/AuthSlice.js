@@ -91,6 +91,17 @@ export const verifyEmail = createAsyncThunk(
   }
 );
 
+export const setNewPassword = createAsyncThunk(
+  "auth/setNewPassword",
+  async (resetData, thunkAPI) => {
+    try {
+      return await authService.setNewPassword(resetData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -182,6 +193,19 @@ export const authSlice = createSlice({
         state.isSuccess = true;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
+      })
+      .addCase(setNewPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setNewPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = "";
+        state.isSuccess = true;
+      })
+      .addCase(setNewPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;

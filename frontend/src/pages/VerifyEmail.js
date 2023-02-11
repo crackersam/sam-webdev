@@ -20,6 +20,7 @@ const VerifyEmail = () => {
     }
     if (isError) {
       toast.error(errorMessage);
+      navigate("/");
     }
     if (!isSuccess && !isError && !isLoading) {
       dispatch(verifyEmail(token));
