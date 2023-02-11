@@ -21,6 +21,7 @@ const Register = () => {
   React.useEffect(() => {
     if (isError) {
       toast.error(errorMessage);
+      dispatch(reset());
     }
 
     if (isSuccess) {

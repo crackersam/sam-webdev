@@ -1,6 +1,8 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login, reset } from "../features/auth/AuthSlice";
 
 const Login = () => {
   const [fields, setFields] = React.useState({
@@ -9,9 +11,27 @@ const Login = () => {
   });
   const { email, password } = fields;
   const dispatch = useDispatch();
-  const { user, isLoading, isSuccess, errorMessage } = useSelector(
+  const navigate = useNavigate();
+
+  const { isError, isSuccess, errorMessage, username } = useSelector(
     (state) => state.auth
   );
+
+  React.useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(reset());
+    }
+
+    if (isSuccess) {
+      toast.success(`Welcome back ${username}`);
+      dispatch(reset());
+      navigate("/");
+    }
+    if (document.cookie) {
+      navigate("/");
+    }
+  }, [isError, errorMessage, isSuccess, dispatch, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,7 +44,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const user = { email, password };
-    dispatch();
+    dispatch(login(user));
   };
   return (
     <>

@@ -26,7 +26,7 @@ const createUser = asyncHandler(async (req, res) => {
   // Set cookie
   res.cookie("token", token, { expires, httpOnly: true });
   // set verification cookie
-  res.cookie("verified", user.verified, { expires, httpOnly: false });
+  res.cookie("verified", "nothing here!", { expires, httpOnly: false });
 
   res.status(201).json({
     name: user.name,
@@ -37,7 +37,15 @@ const createUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findByCredentials(req.body.email, req.body.password);
   const token = await user.generateAuthToken();
-  res.status(200).json({ ...user, token });
+
+  // 30 days in milliseconds
+  const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  // Set cookie
+  res.cookie("token", token, { expires, httpOnly: true });
+  // set verification cookie
+  res.cookie("verified", "nothing here!", { expires, httpOnly: false });
+
+  res.status(200).json(user);
 });
 
 const logoutUser = asyncHandler(async (req, res) => {

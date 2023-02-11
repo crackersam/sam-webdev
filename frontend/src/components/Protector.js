@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 
 const Protector = () => {
   if (!document.cookie) {
-    toast.error("You must be logged in to view this page");
+    toast.error("You need to log in, first! ;^)");
+
     return <Navigate to="/login" />;
   }
   return <Outlet />;
