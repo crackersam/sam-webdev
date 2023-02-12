@@ -5,20 +5,25 @@ import { toast } from "react-toastify";
 
 const Upload = () => {
   const dispatch = useDispatch();
-  const { isError, errorMessage } = useSelector((state) => state.upload);
+  const { isError, errorMessage, successMessage } = useSelector(
+    (state) => state.upload
+  );
 
   useEffect(() => {
     if (isError) {
       toast.error(errorMessage);
     }
-  }, [isError, errorMessage]);
+    if (successMessage) {
+      toast.success(successMessage);
+    }
+  }, [isError, errorMessage, successMessage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
+
     formData.append("file", e.target.file.files[0]);
     dispatch(upload(formData));
-    toast.success("File uploaded.");
   };
 
   return (

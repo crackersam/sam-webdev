@@ -2,7 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const { errorHandler } = require("./middleware/ErrorHandlerMiddleware");
 require("dotenv").config();
-const connectDB = require("./config/db");
+const { connectDB } = require("./config/db");
 const app = express();
 
 require("./utils/sendMail");
@@ -14,6 +14,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/users", require("./routes/UserRoute"));
+
+app.use("/api/uploads", require("./routes/UploadRoute"));
 
 app.use(errorHandler);
 

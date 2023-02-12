@@ -32,7 +32,7 @@ export const uploadSlice = createSlice({
     reset: (state) => {
       state.isError = false;
       state.isLoading = false;
-      state.isSuccess = false;
+      state.successMessage = false;
       state.errorMessage = null;
     },
   },
@@ -40,9 +40,9 @@ export const uploadSlice = createSlice({
     builder.addCase(upload.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(upload.fulfilled, (state) => {
+    builder.addCase(upload.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.isSuccess = true;
+      state.successMessage = action.payload;
     });
     builder.addCase(upload.rejected, (state, action) => {
       state.isLoading = false;
