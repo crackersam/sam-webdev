@@ -13,7 +13,6 @@ import Register from "./pages/Register";
 import { ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile, reset } from "./features/auth/AuthSlice";
-import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import Protector from "./components/Protector";
@@ -22,6 +21,7 @@ import Logout from "./components/Logout";
 import PasswordReset from "./pages/PasswordReset";
 import NewPassword from "./pages/NewPassword";
 import VerifyEmail from "./pages/VerifyEmail";
+import Upload from "./pages/Upload";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
@@ -54,6 +54,7 @@ const App = () => {
           <Route element={<Protector />}>
             <Route path="/protected" element={<Protected />} />
             <Route path="/logout" element={<Logout />} />
+            <Route path="/upload" element={<Upload />} />
           </Route>
         </Routes>
       </Router>

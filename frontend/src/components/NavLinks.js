@@ -27,6 +27,9 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/logout">Logout</NavLink>
       </li>
+      <li>
+        <NavLink to="/upload">Upload</NavLink>
+      </li>
     </>
   );
 
