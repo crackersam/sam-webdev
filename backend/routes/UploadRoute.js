@@ -4,6 +4,7 @@ const { gfs } = require("../config/db");
 const auth = require("../middleware/AuthenticationMiddleware");
 const storage = require("../utils/initGfs");
 const multer = require("multer");
+const uploadFile = require("../controllers/UploadController");
 
 const upload = multer({
   storage,
@@ -14,9 +15,6 @@ const upload = multer({
 // @route POST /uploads
 // @desc Uploads file to DB
 // @access Private
-router.post("/", auth, upload.single("file"), (req, res) => {
-  console.log("file uploaded successfully", req.file);
-  return res.send("File uploaded successfully");
-});
+router.post("/", auth, upload.single("file"), uploadFile);
 
 module.exports = router;
