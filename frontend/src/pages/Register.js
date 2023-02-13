@@ -1,38 +1,22 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../features/auth/AuthSlice";
+import { useToast } from "../hooks/useToast";
 import { useNavigate } from "react-router-dom";
-import { register, reset } from "../features/auth/AuthSlice";
 
 const Register = () => {
   const [fields, setFields] = React.useState({
-    name: "",
+    forename: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const { name, email, password, confirmPassword } = fields;
-  const navigate = useNavigate();
+  const { successMessage } = useSelector((state) => state.auth);
+  const { forename, email, password, confirmPassword } = fields;
   const dispatch = useDispatch();
-  const { isError, isSuccess, errorMessage } = useSelector(
-    (state) => state.auth
-  );
-
-  React.useEffect(() => {
-    if (isError) {
-      toast.error(errorMessage);
-      dispatch(reset());
-    }
-
-    if (isSuccess) {
-      toast.success("Registration successful");
-      dispatch(reset());
-      navigate("/");
-    }
-    if (document.cookie) {
-      navigate("/");
-    }
-  }, [isError, errorMessage, isSuccess, dispatch, navigate]);
+  useToast();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,9 +32,14 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     } else {
-      dispatch(register({ name, email, password }));
+      dispatch(register({ forename, email, password })).then(() => {
+        if (successMessage) {
+          navigate("/");
+        }
+      });
     }
   };
+
   return (
     <>
       <section>
@@ -60,11 +49,11 @@ const Register = () => {
       <section>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="forename">Forename</label>
             <input
               type="text"
-              name="name"
-              value={name}
+              name="forename"
+              value={forename}
               onChange={handleChange}
               required
             />

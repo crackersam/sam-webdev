@@ -22,6 +22,7 @@ import PasswordReset from "./pages/PasswordReset";
 import NewPassword from "./pages/NewPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import Upload from "./pages/Upload";
+import RedirectLoggedIn from "./components/RedirectLoggedIn";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
@@ -46,11 +47,13 @@ const App = () => {
         <Header drawerIsOpen={drawerIsOpen} setDrawerIsOpen={setDrawerIsOpen} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<PasswordReset />} />
-          <Route path="/reset-password/:token" element={<NewPassword />} />
-          <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          <Route element={<RedirectLoggedIn />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<PasswordReset />} />
+            <Route path="/reset-password/:token" element={<NewPassword />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          </Route>
           <Route element={<Protector />}>
             <Route path="/protected" element={<Protected />} />
             <Route path="/logout" element={<Logout />} />

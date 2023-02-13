@@ -4,7 +4,7 @@ const { gfs } = require("../config/db");
 const auth = require("../middleware/AuthenticationMiddleware");
 const storage = require("../utils/initGfs");
 const multer = require("multer");
-const uploadFile = require("../controllers/UploadController");
+const { uploadFile } = require("../controllers/UploadController");
 
 const upload = multer({
   storage,

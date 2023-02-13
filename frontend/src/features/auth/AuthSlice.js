@@ -45,8 +45,6 @@ export const getProfile = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async (thunkAPI) => {
   try {
     return await authService.logout();
-    // clear the cookie
-    document.cookie = null;
   } catch (error) {
     const message =
       (error.response && error.response.data.error) ||
@@ -107,9 +105,8 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.isError = false;
       state.isLoading = false;
-      state.isSuccess = false;
+      state.successMessage = "";
       state.errorMessage = "";
     },
   },
@@ -122,13 +119,11 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.errorMessage = "";
-        state.username = action.payload.name;
-        state.email = action.payload.email;
+        state.successMessage = action.payload.message;
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload;
+        state.errorMessage = action.payload.message;
       })
       .addCase(getProfile.pending, (state) => {
         state.isLoading = true;
@@ -136,8 +131,9 @@ export const authSlice = createSlice({
       .addCase(getProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.username = action.payload.name;
+        state.forename = action.payload.forename;
         state.email = action.payload.email;
+        state.successMessage = action.payload.message;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
@@ -149,7 +145,8 @@ export const authSlice = createSlice({
       .addCase(logout.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.username = null;
+        state.successMessage = action.payload.message;
+        state.forename = null;
         state.email = null;
       })
       .addCase(logout.rejected, (state, action) => {
@@ -162,14 +159,14 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.isSuccess = true;
-        state.username = action.payload.name;
+        state.successMessage = action.payload.message;
+        state.forename = action.payload.user.forename;
         state.email = action.payload.email;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
+        state.errorMessage = action.payload.message;
       })
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
@@ -177,12 +174,12 @@ export const authSlice = createSlice({
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.isSuccess = true;
+        state.successMessage = action.payload.message;
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
+        state.errorMessage = action.payload.message;
       })
       .addCase(verifyEmail.pending, (state) => {
         state.isLoading = true;
@@ -190,12 +187,12 @@ export const authSlice = createSlice({
       .addCase(verifyEmail.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.isSuccess = true;
+        state.successMessage = action.payload.message;
       })
       .addCase(verifyEmail.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
+        state.errorMessage = action.payload.message;
       })
       .addCase(setNewPassword.pending, (state) => {
         state.isLoading = true;
@@ -203,12 +200,12 @@ export const authSlice = createSlice({
       .addCase(setNewPassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = "";
-        state.isSuccess = true;
+        state.successMessage = action.payload.message;
       })
       .addCase(setNewPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
+        state.errorMessage = action.payload.message;
       });
   },
 });

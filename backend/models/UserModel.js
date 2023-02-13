@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    name: {
+    forename: {
       type: String,
       required: [true, "Please add a name"],
       minLength: [3, "Name must be at least 3 characters"],

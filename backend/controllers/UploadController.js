@@ -1,8 +1,9 @@
 const { gfs } = require("../config/db");
 
 const uploadFile = (req, res) => {
-  console.log("file uploaded successfully", req.file);
-  return res.send("File uploaded successfully");
+  return res.json({
+    message: "File uploaded successfully: " + req.file.filename,
+  });
 };
 
 const getMyFilenames = async (req, res) => {
