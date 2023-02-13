@@ -5,7 +5,7 @@ const uploadFile = (req, res) => {
   return res.send("File uploaded successfully");
 };
 
-const getMyFiles = async (req, res) => {
+const getMyFilenames = async (req, res) => {
   try {
     const files = await gfs
       .find({ "metadata.uploader": req.user._id })
@@ -16,10 +16,12 @@ const getMyFiles = async (req, res) => {
         message: "No files available",
       });
     }
-    return res.json(files);
+    const filenames = files.map((file) => file.filename);
+
+    return res.json(filenames);
   } catch (err) {
     console.error(err);
   }
 };
 
-module.exports = { uploadFile, getMyFiles };
+module.exports = { uploadFile, getMyFilenames };
