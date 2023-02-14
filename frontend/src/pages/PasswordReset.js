@@ -1,26 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../features/auth/AuthSlice";
-import { toast } from "react-toastify";
+import { useToast } from "../hooks/useToast";
 
 const PasswordReset = () => {
   const [email, setEmail] = React.useState("");
-  const { isSuccess, isError, errorMessage } = useSelector(
-    (state) => state.auth
-  )``;
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success("Password reset email sent");
-    }
-    if (isError) {
-      toast.error(errorMessage);
-    }
-  }, [isSuccess, isError, errorMessage]);
+  const dispatch = useDispatch();
+  useToast();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(email);
     dispatch(resetPassword(email));
   };
 

@@ -25,15 +25,16 @@ const getProfile = async () => {
 };
 
 const resetPassword = async (email) => {
-  const response = await axios.post(API_URL + "reset-password", email);
+  const response = await axios.post(API_URL + "reset-password", {
+    email,
+  });
   return response.data;
 };
 
 const setNewPassword = async (resetToken, password) => {
-  const response = await axios.post(
-    API_URL + "reset-password/" + resetToken,
-    password
-  );
+  const response = await axios.post(API_URL + "reset-password/" + resetToken, {
+    password,
+  });
   return response.data;
 };
 

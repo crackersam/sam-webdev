@@ -11,8 +11,6 @@ const createUser = asyncHandler(async (req, res) => {
   user.forename =
     user.forename.charAt(0).toUpperCase() + user.forename.slice(1);
 
-  console.log(user.forename);
-
   const verificationToken = crypto.randomBytes(20).toString("hex");
   user.verificationToken = verificationToken;
   try {
@@ -51,13 +49,14 @@ const verifyEmail = asyncHandler(async (req, res) => {
   }
   user.verificationToken = undefined;
   await user.save();
-  res.status(200).json({ message: "Email verified!" });
+  return res.status(200).json({ message: "Email verified!" });
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,
   });
+
   if (!user) {
     return res.status(400).json({ message: "Invalid email address." });
   }
@@ -72,13 +71,13 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 const setNewPassword = asyncHandler(async (req, res) => {
   const user = await User.findOne({
-    email: req.body.email,
     resetToken: req.params.resetToken,
     resetTokenExpiration: { $gt: Date.now() },
   });
   if (!user) {
     return res.status(400).json({ message: "Invalid reset token." });
   }
+
   user.password = req.body.password;
   user.resetToken = undefined;
   user.resetTokenExpiration = undefined;
@@ -87,10 +86,21 @@ const setNewPassword = asyncHandler(async (req, res) => {
   const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   res.cookie("token", token, { expires, httpOnly: true });
   res.cookie("verified", "nothingHere!", { expires, httpOnly: false });
-  res.status(200).json(user);
-  await user.save();
-  res.status(200).json({
-    ...user,
+
+  try {
+    await user.save();
+  } catch (err) {
+    // Error handling for misc validation errors
+    if (err.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ message: Object.values(err.errors)[0].message });
+    }
+    return res.status(400).json({ message: err.message });
+  }
+  return res.status(200).json({
+    forename: user.forename,
+    email: user.email,
     message: "Password reset successful. You are now logged in.",
   });
 });
@@ -129,10 +139,10 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  const { name, email } = user;
+  const { forename, email } = user;
   return res
     .status(200)
-    .json({ message: `Welcome back, ${name}!`, name, email });
+    .json({ message: `Welcome back, ${forename}!`, forename, email });
 });
 
 module.exports = {

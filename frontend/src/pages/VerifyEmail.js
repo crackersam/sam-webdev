@@ -4,28 +4,22 @@ import { verifyEmail } from "../features/auth/AuthSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useToast } from "../hooks/useToast";
 
 const VerifyEmail = () => {
   const dispatch = useDispatch();
   const { token } = useParams();
-  const { isSuccess, isError, errorMessage, isLoading } = useSelector(
-    (state) => state.auth
-  );
   const navigate = useNavigate();
+  const { successMessage } = useSelector((state) => state.auth);
+  useToast();
 
   useEffect(() => {
-    if (isSuccess) {
-      toast.success("Email verified");
-      navigate("/login");
-    }
-    if (isError) {
-      toast.error(errorMessage);
-      navigate("/");
-    }
-    if (!isSuccess && !isError && !isLoading) {
-      dispatch(verifyEmail(token));
-    }
-  }, [isSuccess, isError, errorMessage, isLoading]);
+    dispatch(verifyEmail(token)).then(() => {
+      if (successMessage) {
+        navigate("/");
+      }
+    });
+  }, [token]);
 
   return null;
 };
