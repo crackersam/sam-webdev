@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "./AuthService";
 
 const initialState = {
-  isError: false,
   isLoading: false,
-  isSuccess: false,
   errorMessage: null,
+  forename: "",
+  email: "",
 };
 
 export const register = createAsyncThunk(
@@ -27,22 +27,17 @@ export const register = createAsyncThunk(
 
 export const getProfile = createAsyncThunk(
   "auth/getProfile",
-  async (thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       return await authService.getProfile();
     } catch (error) {
-      const message =
-        (error.response && error.response.data.error) ||
-        error.response.data.message ||
-        error.message ||
-        error.toString();
-
+      const message = error.response.data.message;
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (thunkAPI) => {
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     return await authService.logout();
   } catch (error) {
@@ -119,7 +114,6 @@ export const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.errorMessage = "";
         state.successMessage = action.payload.message;
       })
@@ -167,7 +161,6 @@ export const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
         state.errorMessage = action.payload.message;
       })
       .addCase(resetPassword.pending, (state) => {
@@ -180,7 +173,6 @@ export const authSlice = createSlice({
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
         state.errorMessage = action.payload;
       })
       .addCase(verifyEmail.pending, (state) => {
@@ -193,7 +185,6 @@ export const authSlice = createSlice({
       })
       .addCase(verifyEmail.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
         state.errorMessage = action.payload.message;
       })
       .addCase(setNewPassword.pending, (state) => {
@@ -208,7 +199,6 @@ export const authSlice = createSlice({
       })
       .addCase(setNewPassword.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
         state.errorMessage = action.payload.message;
       });
   },

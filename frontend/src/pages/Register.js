@@ -2,7 +2,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../features/auth/AuthSlice";
-import { useToast } from "../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -15,7 +14,6 @@ const Register = () => {
   const { successMessage } = useSelector((state) => state.auth);
   const { forename, email, password, confirmPassword } = fields;
   const dispatch = useDispatch();
-  useToast();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

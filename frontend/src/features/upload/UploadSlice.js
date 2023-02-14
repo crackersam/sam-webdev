@@ -2,14 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import uploadService from "./UploadService";
 
 const initialState = {
-  isError: false,
+  successMessage: "",
   isLoading: false,
-  isSuccess: false,
-  errorMessage: null,
+  errorMessage: "",
 };
 
 export const upload = createAsyncThunk(
-  "upload/upload",
+  "assets/upload",
   async (formData, thunkAPI) => {
     try {
       return await uploadService.upload(formData);
@@ -25,15 +24,14 @@ export const upload = createAsyncThunk(
   }
 );
 
-export const uploadSlice = createSlice({
-  name: "upload",
+export const assetsSlice = createSlice({
+  name: "assets",
   initialState,
   reducers: {
     reset: (state) => {
-      state.isError = false;
       state.isLoading = false;
-      state.successMessage = false;
-      state.errorMessage = null;
+      state.successMessage = "";
+      state.errorMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -42,16 +40,15 @@ export const uploadSlice = createSlice({
     });
     builder.addCase(upload.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.successMessage = action.payload;
+      state.successMessage = action.payload.message;
     });
     builder.addCase(upload.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
-      state.errorMessage = action.payload;
+      state.errorMessage = action.payload.message;
     });
   },
 });
 
-export const { reset } = uploadSlice.actions;
+export const { reset } = assetsSlice.actions;
 
-export default uploadSlice.reducer;
+export default assetsSlice.reducer;

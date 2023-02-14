@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../features/auth/AuthSlice";
-import { useToast } from "../hooks/useToast";
 
 const PasswordReset = () => {
   const [email, setEmail] = React.useState("");
 
   const dispatch = useDispatch();
-  useToast();
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -20,7 +20,9 @@ const auth = asyncHandler(async (req, res, next) => {
     req.user = user;
     next();
   } catch (e) {
-    res.status(401).send({ error: "Please authenticate." });
+    res.clearCookie("token");
+    res.clearCookie("verified");
+    return res.status(401).json({ message: "Please authenticate." });
   }
 });
 

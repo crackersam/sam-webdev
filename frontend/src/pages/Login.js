@@ -1,7 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../features/auth/AuthSlice";
-import { useToast } from "../hooks/useToast";
 
 const Login = () => {
   const [fields, setFields] = React.useState({
@@ -10,7 +9,6 @@ const Login = () => {
   });
   const { email, password } = fields;
   const dispatch = useDispatch();
-  useToast();
 
   const handleChange = (e) => {
     const { name, value } = e.target;

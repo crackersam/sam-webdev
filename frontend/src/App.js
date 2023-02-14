@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import SideDrawer from "./components/SideDrawer";
 import Header from "./components/Header";
@@ -21,13 +16,15 @@ import Logout from "./components/Logout";
 import PasswordReset from "./pages/PasswordReset";
 import NewPassword from "./pages/NewPassword";
 import VerifyEmail from "./pages/VerifyEmail";
-import Upload from "./pages/Upload";
+import Assets from "./pages/Assets";
 import RedirectLoggedIn from "./components/RedirectLoggedIn";
+import { useToast } from "./hooks/useToast";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
+  useToast();
 
   // check if I have a valid cookie and get the user profile
   React.useEffect(() => {
@@ -57,7 +54,7 @@ const App = () => {
           <Route element={<Protector />}>
             <Route path="/protected" element={<Protected />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/upload" element={<Upload />} />
+            <Route path="/assets" element={<Assets />} />
           </Route>
         </Routes>
       </Router>
