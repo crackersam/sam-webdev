@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { verifyEmail } from "../features/auth/AuthSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { useToast } from "../hooks/useToast";
 
 const VerifyEmail = () => {
@@ -14,11 +13,13 @@ const VerifyEmail = () => {
   useToast();
 
   useEffect(() => {
-    dispatch(verifyEmail(token)).then(() => {
-      if (successMessage) {
-        navigate("/");
-      }
-    });
+    if (successMessage) {
+      navigate("/");
+    }
+  }, [successMessage]);
+
+  useEffect(() => {
+    dispatch(verifyEmail(token));
   }, [token]);
 
   return null;
