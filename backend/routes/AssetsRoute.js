@@ -22,6 +22,6 @@ router.post("/", auth, upload.single("file"), uploadFile);
 // @route GET api/assets
 // @desc Gets all filenames of user's files
 // @access Private
-router.get("/", getMyFilenames);
+router.get("/", auth, getMyFilenames);
 
 module.exports = router;

@@ -1,21 +1,24 @@
 const mongoose = require("mongoose");
 
-let gfs;
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-
-    conn.connection.on("open", () => {
-      // Init stream
-      gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: "uploads",
-      });
+    const conn = mongoose.connection;
+    // check connection
+    conn.on("error", (err) => {
+      console.error(`connection error: ${err.message}`);
+    });
+    conn.once("open", () => {
+      console.log("MongoDB Connected");
     });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    // connection
+    await mongoose.connect(process.env.MONGO_URI);
+
+    return null;
   } catch (err) {
     console.error(err.message);
     process.exit(1);
   }
 };
-module.exports = { connectDB, gfs };
+
+module.exports = { connectDB };
