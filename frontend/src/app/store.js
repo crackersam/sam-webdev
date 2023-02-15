@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import AuthReducer from "../features/auth/AuthSlice";
-import UploadReducer from "../features/upload/UploadSlice";
+import AssetsReducer from "../features/assets/AssetsSlice";
 
 export const store = configureStore({
-  reducer: { auth: AuthReducer, upload: UploadReducer },
+  reducer: { auth: AuthReducer, assets: AssetsReducer },
 });

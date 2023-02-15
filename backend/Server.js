@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use("/api/users", require("./routes/UserRoute"));
 
-app.use("/api/uploads", require("./routes/UploadRoute"));
+app.use("/api/assets", require("./routes/AssetsRoute"));
 
 app.use(errorHandler);
 

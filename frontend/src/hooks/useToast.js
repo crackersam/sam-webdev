@@ -2,26 +2,26 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { reset as resetAuth } from "../features/auth/AuthSlice";
-import { reset as resetUpload } from "../features/upload/UploadSlice";
+import { reset as resetAssets } from "../features/assets/AssetsSlice";
 
 export const useToast = () => {
   const dispatch = useDispatch();
   const {
-    errorMessage: errorMessageUpload,
-    successMessage: successMessageUpload,
-  } = useSelector((state) => state.upload);
+    errorMessage: errorMessageAssets,
+    successMessage: successMessageAssets,
+  } = useSelector((state) => state.assets);
 
   const { errorMessage: errorMessageAuth, successMessage: successMessageAuth } =
     useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (errorMessageUpload) {
-      toast.error(errorMessageUpload);
-      dispatch(resetUpload());
+    if (errorMessageAssets) {
+      toast.error(errorMessageAssets);
+      dispatch(resetAssets());
     }
-    if (successMessageUpload) {
-      toast.success(successMessageUpload);
-      dispatch(resetUpload());
+    if (successMessageAssets) {
+      toast.success(successMessageAssets);
+      dispatch(resetAssets());
     }
     if (errorMessageAuth) {
       toast.error(errorMessageAuth);
@@ -32,8 +32,8 @@ export const useToast = () => {
       dispatch(resetAuth());
     }
   }, [
-    errorMessageUpload,
-    successMessageUpload,
+    errorMessageAssets,
+    successMessageAssets,
     errorMessageAuth,
     successMessageAuth,
   ]);

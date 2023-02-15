@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { gfs } = require("../config/db");
 const auth = require("../middleware/AuthenticationMiddleware");
-const storage = require("../utils/initGfs");
+const storage = require("../utils/initStorage");
 const multer = require("multer");
-const { uploadFile } = require("../controllers/UploadController");
+const {
+  uploadFile,
+  getMyFilenames,
+} = require("../controllers/AssetsController");
 
 const upload = multer({
   storage,
@@ -12,9 +14,14 @@ const upload = multer({
   limits: { fileSize: 10000000 },
 });
 
-// @route POST /uploads
+// @route POST api/assets
 // @desc Uploads file to DB
 // @access Private
 router.post("/", auth, upload.single("file"), uploadFile);
+
+// @route GET api/assets
+// @desc Gets all filenames of user's files
+// @access Private
+router.get("/", getMyFilenames);
 
 module.exports = router;

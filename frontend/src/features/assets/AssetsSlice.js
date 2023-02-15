@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import uploadService from "./UploadService";
+import uploadService from "./AssetsService";
 
 const initialState = {
   successMessage: "",
@@ -12,6 +12,23 @@ export const upload = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       return await uploadService.upload(formData);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getMyFilenames = createAsyncThunk(
+  "assets/getMyFilenames",
+  async (_, thunkAPI) => {
+    try {
+      return await uploadService.getMyFilenames();
     } catch (error) {
       const message =
         (error.response && error.response.data) ||
@@ -43,6 +60,18 @@ export const assetsSlice = createSlice({
       state.successMessage = action.payload.message;
     });
     builder.addCase(upload.rejected, (state, action) => {
+      state.isLoading = false;
+      state.errorMessage = action.payload.message;
+    });
+    builder.addCase(getMyFilenames.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getMyFilenames.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.successMessage = "";
+      state.filenames = action.payload.filenames;
+    });
+    builder.addCase(getMyFilenames.rejected, (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload.message;
     });

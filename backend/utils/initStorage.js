@@ -11,10 +11,10 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         const uploader = req.user._id;
-        const filename = buf.toString("hex") + file.originalname;
+        const filename = buf.toString("hex") + "-" + file.originalname;
         const fileInfo = {
           filename: filename,
-          bucketName: "uploads",
+          bucketName: "assets",
           metadata: { uploader },
         };
         resolve(fileInfo);
