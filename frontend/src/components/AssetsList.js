@@ -3,6 +3,7 @@ import {
   getMyFilenames,
   downloadFile,
   cleanUpAfterDownload,
+  deleteFile,
 } from "../features/assets/AssetsSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -10,13 +11,13 @@ import { Link } from "react-router-dom";
 
 const AssetsList = () => {
   const dispatch = useDispatch();
-  const { filenames, rawFilenames, downloadedFile, newFile } = useSelector(
+  const { filenames, rawFilenames, downloadedFile } = useSelector(
     (state) => state.assets
   );
 
   useEffect(() => {
     dispatch(getMyFilenames());
-  }, [dispatch, newFile]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!downloadedFile) return;
@@ -25,7 +26,6 @@ const AssetsList = () => {
     link.setAttribute("download", downloadedFile.filename);
     document.body.appendChild(link);
     link.click();
-    console.log("downloaded");
     link.remove();
     window.URL.revokeObjectURL(downloadedFile.file);
     dispatch(cleanUpAfterDownload());
@@ -36,12 +36,19 @@ const AssetsList = () => {
     dispatch(downloadFile(filename));
   };
 
+  const handleDelete = async (i) => {
+    const filename = rawFilenames[i];
+    await dispatch(deleteFile(filename));
+    dispatch(getMyFilenames());
+  };
+
   return (
     <>
       {filenames
         ? filenames.map((filename, i) => (
-            <p key={i} onClick={() => handleDownload(i)}>
-              <Link>{filename}</Link>
+            <p key={i}>
+              <Link onClick={() => handleDownload(i)}>{filename}</Link>{" "}
+              <Link onClick={() => handleDelete(i)}>Delete</Link>
             </p>
           ))
         : null}

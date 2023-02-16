@@ -31,7 +31,7 @@ export const getMyFilenames = createAsyncThunk(
       return await assetsService.getMyFilenames();
     } catch (error) {
       const message =
-        (error.response && error.response.data) ||
+        (error.response && error.response.data.message) ||
         error.response.data.message ||
         error.message ||
         error.toString();
@@ -46,6 +46,23 @@ export const downloadFile = createAsyncThunk(
   async (filename, thunkAPI) => {
     try {
       return await assetsService.downloadFile(filename);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteFile = createAsyncThunk(
+  "assets/deleteFile",
+  async (filename, thunkAPI) => {
+    try {
+      return await assetsService.deleteFile(filename);
     } catch (error) {
       const message =
         (error.response && error.response.data) ||
@@ -78,7 +95,6 @@ export const assetsSlice = createSlice({
     builder.addCase(upload.fulfilled, (state, action) => {
       state.isLoading = false;
       state.successMessage = action.payload.message;
-      state.newFile = true;
     });
     builder.addCase(upload.rejected, (state, action) => {
       state.isLoading = false;

@@ -30,9 +30,17 @@ const downloadFile = async (filename) => {
   };
 };
 
+const deleteFile = async (filename) => {
+  const response = await axios.delete(API_URL + filename, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 const uploadService = {
   upload,
   getMyFilenames,
   downloadFile,
+  deleteFile,
 };
 export default uploadService;

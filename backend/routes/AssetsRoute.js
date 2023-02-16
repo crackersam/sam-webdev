@@ -7,6 +7,7 @@ const {
   uploadFile,
   getMyFilenames,
   downloadFile,
+  deleteFile,
 } = require("../controllers/AssetsController");
 
 const upload = multer({
@@ -28,6 +29,11 @@ router.get("/", auth, getMyFilenames);
 // @route GET api/assets/:filename
 // @desc Downloads file
 // @access Private
-router.get("/:filename", downloadFile);
+router.get("/:filename", auth, downloadFile);
+
+// @route DELETE api/assets/:filename
+// @desc Deletes file
+// @access Private
+router.delete("/:filename", auth, deleteFile);
 
 module.exports = router;
