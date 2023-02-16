@@ -22,8 +22,12 @@ const getMyFilenames = async () => {
 const downloadFile = async (filename) => {
   const response = await axios.get(API_URL + filename, {
     withCredentials: true,
+    responseType: "blob",
   });
-  return response.data;
+  return {
+    file: window.URL.createObjectURL(response.data),
+    filename: filename,
+  };
 };
 
 const uploadService = {

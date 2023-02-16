@@ -10,6 +10,7 @@ const UploadForm = () => {
     const formData = new FormData();
     formData.append("file", e.target.file.files[0]);
     dispatch(upload(formData));
+    e.target.reset();
   };
 
   return (

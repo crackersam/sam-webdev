@@ -67,6 +67,9 @@ export const assetsSlice = createSlice({
       state.successMessage = "";
       state.errorMessage = "";
     },
+    cleanUpAfterDownload: (state) => {
+      state.downloadedFile = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(upload.pending, (state) => {
@@ -75,6 +78,7 @@ export const assetsSlice = createSlice({
     builder.addCase(upload.fulfilled, (state, action) => {
       state.isLoading = false;
       state.successMessage = action.payload.message;
+      state.newFile = true;
     });
     builder.addCase(upload.rejected, (state, action) => {
       state.isLoading = false;
@@ -99,7 +103,7 @@ export const assetsSlice = createSlice({
     builder.addCase(downloadFile.fulfilled, (state, action) => {
       state.isLoading = false;
       state.successMessage = "";
-      state.downloadFile = action.payload;
+      state.downloadedFile = action.payload;
     });
     builder.addCase(downloadFile.rejected, (state, action) => {
       state.isLoading = false;
@@ -108,6 +112,6 @@ export const assetsSlice = createSlice({
   },
 });
 
-export const { reset } = assetsSlice.actions;
+export const { reset, cleanUpAfterDownload } = assetsSlice.actions;
 
 export default assetsSlice.reducer;
