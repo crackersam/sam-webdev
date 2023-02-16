@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import uploadService from "./AssetsService";
+import assetsService from "./AssetsService";
 
 const initialState = {
   successMessage: "",
@@ -11,7 +11,7 @@ export const upload = createAsyncThunk(
   "assets/upload",
   async (formData, thunkAPI) => {
     try {
-      return await uploadService.upload(formData);
+      return await assetsService.upload(formData);
     } catch (error) {
       const message =
         (error.response && error.response.data) ||
@@ -28,7 +28,24 @@ export const getMyFilenames = createAsyncThunk(
   "assets/getMyFilenames",
   async (_, thunkAPI) => {
     try {
-      return await uploadService.getMyFilenames();
+      return await assetsService.getMyFilenames();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const downloadFile = createAsyncThunk(
+  "assets/downloadFile",
+  async (filename, thunkAPI) => {
+    try {
+      return await assetsService.downloadFile(filename);
     } catch (error) {
       const message =
         (error.response && error.response.data) ||
@@ -70,10 +87,23 @@ export const assetsSlice = createSlice({
       state.isLoading = false;
       state.successMessage = "";
       state.filenames = action.payload.filenames;
+      state.rawFilenames = action.payload.rawFilenames;
     });
     builder.addCase(getMyFilenames.rejected, (state, action) => {
       state.isLoading = false;
-      state.errorMessage = action.payload.message;
+      state.errorMessage = action.payload;
+    });
+    builder.addCase(downloadFile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(downloadFile.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.successMessage = "";
+      state.downloadFile = action.payload;
+    });
+    builder.addCase(downloadFile.rejected, (state, action) => {
+      state.isLoading = false;
+      state.errorMessage = action.payload;
     });
   },
 });

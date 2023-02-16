@@ -27,17 +27,33 @@ const getMyFilenames = async (req, res) => {
         message: "No files available",
       });
     }
-    const filenames = files.map((file) => file.filename.split("-"));
-    for (file in filenames) {
+    const rawFilenames = files.map((file) => file.filename);
+    const filenames = rawFilenames.map((filename) => filename.split("-"));
+
+    for (const file in filenames) {
       filenames[file].shift();
       filenames[file] = filenames[file].join("-");
     }
 
-    console.log(filenames);
-    return res.json(filenames);
+    return res.json({ filenames, rawFilenames });
   } catch (err) {
     console.error(err);
   }
 };
 
-module.exports = { uploadFile, getMyFilenames };
+const downloadFile = async (req, res) => {
+  try {
+    const file = await gfs.find({ filename: req.params.filename }).toArray();
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        message: "No file available",
+      });
+    }
+    const readStream = gfs.openDownloadStreamByName(req.params.filename);
+    readStream.pipe(res);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+module.exports = { uploadFile, getMyFilenames, downloadFile };

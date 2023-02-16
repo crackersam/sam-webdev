@@ -19,8 +19,16 @@ const getMyFilenames = async () => {
   return response.data;
 };
 
+const downloadFile = async (filename) => {
+  const response = await axios.get(API_URL + filename, {
+    withCredentials: true,
+  });
+  return response.data;
+};
+
 const uploadService = {
   upload,
   getMyFilenames,
+  downloadFile,
 };
 export default uploadService;

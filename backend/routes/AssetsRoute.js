@@ -6,6 +6,7 @@ const multer = require("multer");
 const {
   uploadFile,
   getMyFilenames,
+  downloadFile,
 } = require("../controllers/AssetsController");
 
 const upload = multer({
@@ -23,5 +24,10 @@ router.post("/", auth, upload.single("file"), uploadFile);
 // @desc Gets all filenames of user's files
 // @access Private
 router.get("/", auth, getMyFilenames);
+
+// @route GET api/assets/:filename
+// @desc Downloads file
+// @access Private
+router.get("/:filename", downloadFile);
 
 module.exports = router;
