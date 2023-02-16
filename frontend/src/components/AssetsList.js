@@ -38,8 +38,12 @@ const AssetsList = () => {
 
   const handleDelete = async (i) => {
     const filename = rawFilenames[i];
-    await dispatch(deleteFile(filename));
-    dispatch(getMyFilenames());
+    try {
+      await dispatch(deleteFile(filename));
+      dispatch(getMyFilenames());
+    } catch (error) {
+      dispatch(getMyFilenames());
+    }
   };
 
   return (

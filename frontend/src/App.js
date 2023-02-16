@@ -11,7 +11,6 @@ import { getProfile, reset } from "./features/auth/AuthSlice";
 
 import "react-toastify/dist/ReactToastify.css";
 import Protector from "./components/Protector";
-import Protected from "./components/Protected";
 import Logout from "./components/Logout";
 import PasswordReset from "./pages/PasswordReset";
 import NewPassword from "./pages/NewPassword";
@@ -31,7 +30,6 @@ const App = () => {
     if (document.cookie) {
       dispatch(getProfile()).then(() => dispatch(reset()));
     }
-    console.log("cookie check");
   }, []);
 
   return (
@@ -52,7 +50,6 @@ const App = () => {
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
           </Route>
           <Route element={<Protector />}>
-            <Route path="/protected" element={<Protected />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/assets" element={<Assets />} />
           </Route>

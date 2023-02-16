@@ -112,6 +112,8 @@ export const assetsSlice = createSlice({
     builder.addCase(getMyFilenames.rejected, (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload;
+      state.filenames = "";
+      state.rawFilenames = "";
     });
     builder.addCase(downloadFile.pending, (state) => {
       state.isLoading = true;
@@ -122,6 +124,17 @@ export const assetsSlice = createSlice({
       state.downloadedFile = action.payload;
     });
     builder.addCase(downloadFile.rejected, (state, action) => {
+      state.isLoading = false;
+      state.errorMessage = action.payload;
+    });
+    builder.addCase(deleteFile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteFile.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.successMessage = action.payload.message;
+    });
+    builder.addCase(deleteFile.rejected, (state, action) => {
       state.isLoading = false;
       state.errorMessage = action.payload;
     });

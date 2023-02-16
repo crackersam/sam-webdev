@@ -22,7 +22,7 @@ const MainNavigation = () => {
   ) : (
     <>
       <li>
-        <NavLink to="/protected">Protected</NavLink>
+        <NavLink to="/assets">Assets</NavLink>
       </li>
       <li>
         <NavLink to="/logout">Logout</NavLink>
