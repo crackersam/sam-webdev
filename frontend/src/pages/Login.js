@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { login } from "../features/auth/AuthSlice";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const [fields, setFields] = React.useState({
@@ -9,6 +11,8 @@ const Login = () => {
   });
   const { email, password } = fields;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { successMessage } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +26,9 @@ const Login = () => {
     e.preventDefault();
     const user = { email, password };
     dispatch(login(user));
+    if (successMessage) {
+      navigate("/");
+    }
   };
   return (
     <>
@@ -51,7 +58,7 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit">Register</button>
+          <button type="submit">Login</button>
         </form>
       </section>
     </>

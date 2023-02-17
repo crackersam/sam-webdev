@@ -28,6 +28,29 @@ const getListOfUsersAndAssets = async (req, res) => {
   }
 };
 
+const downloadFile = async (req, res) => {
+  if (!req.user.admin) {
+    return res.status(401).json({ message: "Not authorized." });
+  }
+  try {
+    const file = await gfs
+      .find({
+        filename: req.params.filename,
+      })
+      .toArray();
+    if (!file || file.length === 0) {
+      return res.status(404).json({
+        message: "No file available",
+      });
+    }
+    const readStream = gfs.openDownloadStreamByName(req.params.filename);
+    readStream.pipe(res);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
+  downloadFile,
   getListOfUsersAndAssets,
 };

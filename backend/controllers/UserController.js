@@ -10,6 +10,7 @@ const createUser = asyncHandler(async (req, res) => {
   // convert all letters of forename to lowercase, except first letter  user.forename =
   user.forename =
     user.forename.charAt(0).toUpperCase() + user.forename.slice(1);
+  user.email = user.email.toLowerCase();
 
   const verificationToken = crypto.randomBytes(20).toString("hex");
   user.verificationToken = verificationToken;
@@ -106,7 +107,16 @@ const setNewPassword = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const user = await User.findByCredentials(req.body.email, req.body.password);
+  const user = await User.findByCredentials(
+    req.body.email.toLowerCase(),
+    req.body.password
+  );
+  if (user.verificationToken) {
+    return res
+      .status(400)
+      .json({ message: "Please verify your email address." });
+  }
+
   const token = await user.generateAuthToken();
   const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   res.cookie("token", token, { expires, httpOnly: true });

@@ -160,6 +160,7 @@ export const authSlice = createSlice({
         state.successMessage = action.payload.message;
         state.forename = action.payload.user.forename;
         state.email = action.payload.email;
+        state.admin = action.payload.user.admin;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
