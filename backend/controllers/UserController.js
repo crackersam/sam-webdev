@@ -139,10 +139,11 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  const { forename, email } = user;
+  const { forename, email, admin } = user;
+
   return res
     .status(200)
-    .json({ message: `Welcome back, ${forename}!`, forename, email });
+    .json({ message: `Welcome back, ${forename}!`, forename, email, admin });
 });
 
 module.exports = {

@@ -18,6 +18,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Assets from "./pages/Assets";
 import RedirectLoggedIn from "./components/RedirectLoggedIn";
 import { useToast } from "./hooks/useToast";
+import Admin from "./pages/Admin";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] = React.useState(false);
@@ -52,6 +53,9 @@ const App = () => {
           <Route element={<Protector />}>
             <Route path="/logout" element={<Logout />} />
             <Route path="/assets" element={<Assets />} />
+          </Route>
+          <Route element={<Protector admin={true} />}>
+            <Route path="/admin" element={<Admin />} />
           </Route>
         </Routes>
       </Router>

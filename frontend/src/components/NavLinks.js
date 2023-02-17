@@ -1,9 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "./NavLinks.css";
 
 const MainNavigation = () => {
+  const { admin } = useSelector((state) => state.auth);
   const links = !document.cookie ? (
     <>
       <li>
@@ -27,9 +29,11 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/logout">Logout</NavLink>
       </li>
-      <li>
-        <NavLink to="/upload">Upload</NavLink>
-      </li>
+      {admin && (
+        <li>
+          <NavLink to="/admin">Admin</NavLink>
+        </li>
+      )}
     </>
   );
 

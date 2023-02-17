@@ -6,6 +6,7 @@ const initialState = {
   errorMessage: null,
   forename: "",
   email: "",
+  admin: false,
 };
 
 export const register = createAsyncThunk(
@@ -130,6 +131,7 @@ export const authSlice = createSlice({
         state.forename = action.payload.forename;
         state.email = action.payload.email;
         state.successMessage = action.payload.message;
+        state.admin = action.payload.admin;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;

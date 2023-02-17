@@ -37,10 +37,10 @@ const deleteFile = async (filename) => {
   return response.data;
 };
 
-const uploadService = {
+const assetsService = {
   upload,
   getMyFilenames,
   downloadFile,
   deleteFile,
 };
-export default uploadService;
+export default assetsService;

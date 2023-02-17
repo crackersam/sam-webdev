@@ -17,6 +17,8 @@ app.use("/api/users", require("./routes/UserRoute"));
 
 app.use("/api/assets", require("./routes/AssetsRoute"));
 
+app.use("/api/admin", require("./routes/AdminRoute"));
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
