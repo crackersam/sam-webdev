@@ -127,7 +127,6 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  // get token from cookie called token
   const token = req.cookies.token;
   res.clearCookie("token");
   res.clearCookie("verified");
@@ -148,8 +147,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  const { forename, email, admin } = user;
+  const { forename, email, admin } = req.user;
 
   return res
     .status(200)

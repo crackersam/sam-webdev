@@ -48,6 +48,16 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    availability: [
+      {
+        from: {
+          type: Date,
+        },
+        to: {
+          type: Date,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

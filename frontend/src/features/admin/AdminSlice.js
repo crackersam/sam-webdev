@@ -41,6 +41,40 @@ export const downloadFile = createAsyncThunk(
   }
 );
 
+export const updateAvailability = createAsyncThunk(
+  "admin/updateAvailability",
+  async (data, thunkAPI) => {
+    try {
+      return await adminService.updateAvailability(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getAvailability = createAsyncThunk(
+  "admin/getAvailability",
+  async (_, thunkAPI) => {
+    try {
+      return await adminService.getAvailability();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -66,6 +100,28 @@ export const adminSlice = createSlice({
         state.downloadedFile = action.payload;
       })
       .addCase(downloadFile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(updateAvailability.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateAvailability.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(updateAvailability.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(getAvailability.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAvailability.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.availability = action.payload.availability;
+      })
+      .addCase(getAvailability.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
       });

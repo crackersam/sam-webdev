@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Admin } = require("../models/UserModel");
 
 // init gfs
 let gfs;
@@ -50,7 +51,28 @@ const downloadFile = async (req, res) => {
   }
 };
 
+const updateAvailability = async (req, res) => {
+  if (!req.user.admin) {
+    return res.status(401).json({ message: "Not authorized." });
+  }
+  try {
+    admin = await User.findById(req.user._id);
+    admin.availability = req.body.availability;
+    await admin.save();
+    return res.status(200).json({ message: "Availability updated." });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const getAvailability = (req, res) => {
+  const admin = Admin.findOne({ admin: true });
+  return res.status(200).json({ availability: admin.availability });
+};
+
 module.exports = {
   downloadFile,
   getListOfUsersAndAssets,
+  updateAvailability,
+  getAvailability,
 };
