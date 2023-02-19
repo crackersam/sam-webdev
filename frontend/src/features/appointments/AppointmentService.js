@@ -25,8 +25,33 @@ const newAppointmentRequest = async (date) => {
   return response.data;
 };
 
+const getMyAppointments = async () => {
+  const response = await axios.get(
+    API_URL + "my-appointments",
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+const cancelAppointment = async (id) => {
+  const response = await axios.delete(
+    API_URL + "cancel-appointment/",
+    {
+      data: {
+        id,
+      },
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
 const appointmentsService = {
   getAvailableTimes,
   newAppointmentRequest,
+  getMyAppointments,
+  cancelAppointment,
 };
 export default appointmentsService;

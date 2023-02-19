@@ -3,11 +3,12 @@ import { DatePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAvailableTimes,
+  getMyAppointments,
   newAppointmentRequest,
 } from "../features/appointments/AppointmentSlice";
 import dayjs from "dayjs";
 
-const AppointmentBookingForm = () => {
+const AppointmentBookingForm = (props) => {
   const dispatch = useDispatch();
   const { availability } = useSelector(
     (state) => state.appt
@@ -36,10 +37,11 @@ const AppointmentBookingForm = () => {
   const disabledDate = (current) => {
     return current && current < dayjs().endOf("day");
   };
-  const chosenDate = (date) => {
-    dispatch(
+  const chosenDate = async (date) => {
+    await dispatch(
       newAppointmentRequest(dayjs(date).toISOString())
     );
+    dispatch(getMyAppointments());
   };
   return (
     <>

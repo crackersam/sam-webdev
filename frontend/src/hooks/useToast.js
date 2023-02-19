@@ -29,20 +29,14 @@ export const useToast = () => {
   } = useSelector((state) => state.appt);
 
   useEffect(() => {
-    if (errorMessageAppointments) {
-      toast.error(errorMessageAppointments);
-      dispatch(resetAppointments());
-    }
-  }, [errorMessageAppointments]);
-
-  useEffect(() => {
     if (successMessageAppointments) {
       toast.success(successMessageAppointments);
       dispatch(resetAppointments());
     }
-  }, [successMessageAppointments]);
-
-  useEffect(() => {
+    if (errorMessageAppointments) {
+      toast.error(errorMessageAppointments);
+      dispatch(resetAppointments());
+    }
     if (errorMessageAssets) {
       toast.error(errorMessageAssets);
       dispatch(resetAssets());
@@ -74,6 +68,8 @@ export const useToast = () => {
     successMessageAuth,
     errorMessageAdmin,
     successMessageAdmin,
+    errorMessageAppointments,
+    successMessageAppointments,
   ]);
   return null;
 };
