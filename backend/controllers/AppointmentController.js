@@ -1,5 +1,6 @@
 const User = require("../models/UserModel");
 const Appointment = require("../models/AppointmentModel");
+const dayjs = require("dayjs");
 
 const getAvailability = async (req, res) => {
   try {
@@ -22,12 +23,35 @@ const createAppointment = async (req, res) => {
       user: req.user._id,
       date: req.body.date,
     });
+    // check if appointment is available
+    const otherAppointment = await Appointment.findOne({
+      date: {
+        $gte: dayjs(req.body.date)
+          .subtract(29, "minutes")
+          .toDate(),
+        $lte: dayjs(req.body.date)
+          .add(29, "minutes")
+          .toDate(),
+      },
+    }).populate("user");
+    if (
+      otherAppointment.user.forename === req.user.forename
+    ) {
+      return res.status(400).json({
+        message: "That slot is already booked by you.",
+      });
+    } else if (otherAppointment) {
+      return res.status(400).json({
+        message:
+          "That slot is already booked, please select another.",
+      });
+    }
     await appointment.save();
     return res
       .status(201)
       .json({ message: "Appointment created." });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.json({ message: err.message });
   }
 };
 

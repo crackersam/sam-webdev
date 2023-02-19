@@ -52,11 +52,7 @@ const UserSchema = new Schema(
     },
     availability: {
       type: [Date],
-      validate: {
-        validator: (v) => v.length === 2,
-        message:
-          "Availability array must contain exactly 2 elements",
-      },
+      default: [],
     },
   },
   { timestamps: true }
