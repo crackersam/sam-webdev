@@ -27,6 +27,9 @@ const MainNavigation = () => {
         <NavLink to="/assets">Assets</NavLink>
       </li>
       <li>
+        <NavLink to="/appointments">Appointments</NavLink>
+      </li>
+      <li>
         <NavLink to="/logout">Logout</NavLink>
       </li>
       {admin && (
