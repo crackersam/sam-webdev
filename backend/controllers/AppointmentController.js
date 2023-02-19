@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const Appointment = require("../models/AppointmentModel");
 
 const getAvailability = async (req, res) => {
   try {
@@ -17,7 +18,14 @@ const getAvailability = async (req, res) => {
 
 const createAppointment = async (req, res) => {
   try {
-    console.log(req.body);
+    const appointment = new Appointment({
+      user: req.user._id,
+      date: req.body.date,
+    });
+    await appointment.save();
+    return res
+      .status(201)
+      .json({ message: "Appointment created." });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

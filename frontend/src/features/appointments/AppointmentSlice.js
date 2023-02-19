@@ -48,7 +48,12 @@ export const newAppointmentRequest = createAsyncThunk(
 export const appointmentsSlice = createSlice({
   name: "appointments",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.successMessage = "";
+      state.errorMessage = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAvailableTimes.pending, (state) => {
@@ -67,8 +72,30 @@ export const appointmentsSlice = createSlice({
           state.isLoading = false;
           state.errorMessage = action.payload;
         }
+      )
+      .addCase(
+        newAppointmentRequest.pending,
+        (state, action) => {
+          state.isLoading = true;
+        }
+      )
+      .addCase(
+        newAppointmentRequest.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.successMessage = action.payload.message;
+        }
+      )
+      .addCase(
+        newAppointmentRequest.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload.message;
+        }
       );
   },
 });
+
+export const { reset } = appointmentsSlice.actions;
 
 export default appointmentsSlice.reducer;

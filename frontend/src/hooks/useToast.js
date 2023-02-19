@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { reset as resetAuth } from "../features/auth/AuthSlice";
 import { reset as resetAssets } from "../features/assets/AssetsSlice";
 import { resetAdmin } from "../features/admin/AdminSlice";
+import { reset as resetAppointments } from "../features/appointments/AppointmentSlice";
 
 export const useToast = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,25 @@ export const useToast = () => {
     errorMessage: errorMessageAdmin,
     successMessage: successMessageAdmin,
   } = useSelector((state) => state.admin);
+
+  const {
+    errorMessage: errorMessageAppointments,
+    successMessage: successMessageAppointments,
+  } = useSelector((state) => state.appt);
+
+  useEffect(() => {
+    if (errorMessageAppointments) {
+      toast.error(errorMessageAppointments);
+      dispatch(resetAppointments());
+    }
+  }, [errorMessageAppointments]);
+
+  useEffect(() => {
+    if (successMessageAppointments) {
+      toast.success(successMessageAppointments);
+      dispatch(resetAppointments());
+    }
+  }, [successMessageAppointments]);
 
   useEffect(() => {
     if (errorMessageAssets) {
