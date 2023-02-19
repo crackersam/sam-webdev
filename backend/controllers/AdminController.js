@@ -89,7 +89,7 @@ const updateAvailability = async (req, res) => {
       .status(200)
       .json({ message: "Availability updated." });
   } catch (err) {
-    console.error(err);
+    return res.status(500).json({ message: err.message });
   }
 };
 

@@ -22,6 +22,19 @@ function Availability() {
     useState([]);
 
   useEffect(() => {
+    dispatch(getAvailability());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (availability && availability.length > 0) {
+      setSelectedTimeRange([
+        dayjs(availability[0]),
+        dayjs(availability[1]),
+      ]);
+    }
+  }, [availability]);
+
+  useEffect(() => {
     if (selectedTimeRangeDate.length > 0) {
       dispatch(updateAvailability(selectedTimeRangeDate));
     }

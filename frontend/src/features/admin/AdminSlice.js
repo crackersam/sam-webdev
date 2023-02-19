@@ -75,7 +75,12 @@ export const getAvailability = createAsyncThunk(
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAdmin: (state) => {
+      state.successMessage = "";
+      state.errorMessage = "";
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUsersAndFiles.pending, (state) => {
@@ -126,12 +131,15 @@ export const adminSlice = createSlice({
       )
       .addCase(getAvailability.pending, (state) => {
         state.isLoading = true;
+        state.successMessage = "";
+        state.errorMessage = "";
       })
       .addCase(
         getAvailability.fulfilled,
         (state, action) => {
           state.isLoading = false;
           state.availability = action.payload.availability;
+          state.errorMessage = "";
         }
       )
       .addCase(
@@ -139,9 +147,10 @@ export const adminSlice = createSlice({
         (state, action) => {
           state.isLoading = false;
           state.errorMessage = action.payload;
+          state.successMessage = "";
         }
       );
   },
 });
-
+export const { resetAdmin } = adminSlice.actions;
 export default adminSlice.reducer;

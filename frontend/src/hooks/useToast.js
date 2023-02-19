@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { reset as resetAuth } from "../features/auth/AuthSlice";
 import { reset as resetAssets } from "../features/assets/AssetsSlice";
+import { resetAdmin } from "../features/admin/AdminSlice";
 
 export const useToast = () => {
   const dispatch = useDispatch();
@@ -11,8 +12,15 @@ export const useToast = () => {
     successMessage: successMessageAssets,
   } = useSelector((state) => state.assets);
 
-  const { errorMessage: errorMessageAuth, successMessage: successMessageAuth } =
-    useSelector((state) => state.auth);
+  const {
+    errorMessage: errorMessageAuth,
+    successMessage: successMessageAuth,
+  } = useSelector((state) => state.auth);
+
+  const {
+    errorMessage: errorMessageAdmin,
+    successMessage: successMessageAdmin,
+  } = useSelector((state) => state.admin);
 
   useEffect(() => {
     if (errorMessageAssets) {
@@ -22,6 +30,14 @@ export const useToast = () => {
     if (successMessageAssets) {
       toast.success(successMessageAssets);
       dispatch(resetAssets());
+    }
+    if (errorMessageAdmin) {
+      toast.error(errorMessageAdmin);
+      dispatch(resetAdmin());
+    }
+    if (successMessageAdmin) {
+      toast.success(successMessageAdmin);
+      dispatch(resetAdmin());
     }
     if (errorMessageAuth) {
       toast.error(errorMessageAuth);
@@ -36,6 +52,8 @@ export const useToast = () => {
     successMessageAssets,
     errorMessageAuth,
     successMessageAuth,
+    errorMessageAdmin,
+    successMessageAdmin,
   ]);
   return null;
 };
