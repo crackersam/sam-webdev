@@ -9,27 +9,32 @@ import { useSelector, useDispatch } from "react-redux";
 const { RangePicker } = TimePicker;
 
 function Availability() {
-  const { availability } = useSelector((state) => state.admin);
+  const { availability } = useSelector(
+    (state) => state.admin
+  );
+  const dispatch = useDispatch();
+  const [selectedTimeRange, setSelectedTimeRange] =
+    useState([
+      dayjs().hour(9).minute(0),
+      dayjs().hour(18).minute(0),
+    ]);
+  const [selectedTimeRangeDate, setSelectedTimeRangeDate] =
+    useState([]);
 
   useEffect(() => {
-    dispatch(getAvailability());
-    if (availability) {
-      setSelectedTimeRangeDate(availability);
-      setSelectedTimeRange([dayjs(availability[0]), dayjs(availability[1])]);
+    if (selectedTimeRangeDate.length > 0) {
+      dispatch(updateAvailability(selectedTimeRangeDate));
     }
-  }, [availability]);
-  const dispatch = useDispatch();
-  const [selectedTimeRange, setSelectedTimeRange] = useState([
-    dayjs().hour(9).minute(0),
-    dayjs().hour(18).minute(0),
-  ]);
-  const [selectedTimeRangeDate, setSelectedTimeRangeDate] = useState([]);
+  }, [selectedTimeRangeDate]);
 
   const handleChange = ([start, end]) => {
     setSelectedTimeRange([start, end]);
-    setSelectedTimeRangeDate([dayjs(start).toDate(), dayjs(end).toDate()]);
-    dispatch(updateAvailability(selectedTimeRangeDate));
+    setSelectedTimeRangeDate([
+      dayjs(start).toDate().toISOString(),
+      dayjs(end).toDate().toISOString(),
+    ]);
   };
+
   return (
     <div>
       <RangePicker

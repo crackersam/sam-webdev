@@ -1,4 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
 import adminService from "./AdminService";
 
 const initialState = {
@@ -8,7 +11,7 @@ const initialState = {
 };
 
 export const getUsersAndFiles = createAsyncThunk(
-  "admin/getUsersList",
+  "admin/getUsersAndFiles",
   async (_, thunkAPI) => {
     try {
       return await adminService.getUsersAndFiles();
@@ -52,7 +55,6 @@ export const updateAvailability = createAsyncThunk(
         error.response.data.message ||
         error.message ||
         error.toString();
-
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -64,12 +66,7 @@ export const getAvailability = createAsyncThunk(
     try {
       return await adminService.getAvailability();
     } catch (error) {
-      const message =
-        (error.response && error.response.data) ||
-        error.response.data.message ||
-        error.message ||
-        error.toString();
-
+      const message = error.response.data.message;
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -84,14 +81,21 @@ export const adminSlice = createSlice({
       .addCase(getUsersAndFiles.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getUsersAndFiles.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.usersAndFilesList = action.payload.UsersAndFilesList;
-      })
-      .addCase(getUsersAndFiles.rejected, (state, action) => {
-        state.isLoading = false;
-        state.errorMessage = action.payload;
-      })
+      .addCase(
+        getUsersAndFiles.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.usersAndFilesList =
+            action.payload.UsersAndFilesList;
+        }
+      )
+      .addCase(
+        getUsersAndFiles.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload;
+        }
+      )
       .addCase(downloadFile.pending, (state) => {
         state.isLoading = true;
       })
@@ -106,25 +110,37 @@ export const adminSlice = createSlice({
       .addCase(updateAvailability.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateAvailability.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.successMessage = action.payload.message;
-      })
-      .addCase(updateAvailability.rejected, (state, action) => {
-        state.isLoading = false;
-        state.errorMessage = action.payload;
-      })
+      .addCase(
+        updateAvailability.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.successMessage = action.payload.message;
+        }
+      )
+      .addCase(
+        updateAvailability.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload;
+        }
+      )
       .addCase(getAvailability.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAvailability.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.availability = action.payload.availability;
-      })
-      .addCase(getAvailability.rejected, (state, action) => {
-        state.isLoading = false;
-        state.errorMessage = action.payload;
-      });
+      .addCase(
+        getAvailability.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.availability = action.payload.availability;
+        }
+      )
+      .addCase(
+        getAvailability.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload;
+        }
+      );
   },
 });
 

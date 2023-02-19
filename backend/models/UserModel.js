@@ -18,7 +18,9 @@ const UserSchema = new Schema(
       validate: {
         validator: (value) => {
           if (!validator.isEmail(value)) {
-            throw new Error("Please enter a valid email address");
+            throw new Error(
+              "Please enter a valid email address"
+            );
           }
         },
       },
@@ -48,16 +50,14 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    availability: [
-      {
-        from: {
-          type: Date,
-        },
-        to: {
-          type: Date,
-        },
+    availability: {
+      type: [Date],
+      validate: {
+        validator: (v) => v.length === 2,
+        message:
+          "Availability array must contain exactly 2 elements",
       },
-    ],
+    },
   },
   { timestamps: true }
 );
@@ -74,20 +74,30 @@ UserSchema.methods.toJSON = function () {
 
 UserSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, {
-    expiresIn: "7 days",
-  });
+  const token = jwt.sign(
+    { _id: user._id.toString() },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7 days",
+    }
+  );
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;
 };
 
-UserSchema.statics.findByCredentials = async (email, password) => {
+UserSchema.statics.findByCredentials = async (
+  email,
+  password
+) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("Unable to login");
   }
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(
+    password,
+    user.password
+  );
   if (!isMatch) {
     throw new Error("Unable to login");
   }
@@ -96,7 +106,9 @@ UserSchema.statics.findByCredentials = async (email, password) => {
 
 UserSchema.pre("save", function (next) {
   if (this.password.length < 6) {
-    throw new Error("Password must be at least 6 characters");
+    throw new Error(
+      "Password must be at least 6 characters"
+    );
   }
   if (!this.isModified("password")) {
     return next();

@@ -21,7 +21,6 @@ const login = async (loginData) => {
 
 const getProfile = async () => {
   const response = await axios.get(API_URL + "me", { withCredentials: true });
-  console.log("response", response);
   return response.data;
 };
 
