@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { DatePicker } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { getAvailableTimes } from "../features/appointments/AppointmentSlice";
+import {
+  getAvailableTimes,
+  newAppointmentRequest,
+} from "../features/appointments/AppointmentSlice";
 import dayjs from "dayjs";
 
 const AppointmentBookingForm = () => {
@@ -14,35 +17,38 @@ const AppointmentBookingForm = () => {
     dispatch(getAvailableTimes());
   }, []);
 
-  function disabledDateTimeRange(startDate, endDate) {
-    const start = dayjs(startDate).startOf("hour");
-    const end = dayjs(endDate).startOf("hour");
-
-    return (current) => {
-      if (!current) {
-        return false;
-      }
-
-      const currentDateTime =
-        dayjs(current).startOf("hour");
-
-      // Disable times before the start time or after the end time
-      return (
-        currentDateTime.isBefore(start) ||
-        currentDateTime.isAfter(end)
-      );
+  function getDisabledHours() {
+    return {
+      disabledHours: function () {
+        const start = dayjs(availability[0]).hour();
+        const end = dayjs(availability[1]).hour();
+        const hours = [];
+        for (let i = 0; i < start; i++) {
+          hours.push(i);
+        }
+        for (let i = end; i < 24; i++) {
+          hours.push(i);
+        }
+        return hours;
+      },
     };
   }
-
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf("day");
+  };
+  const chosenDate = (date) => {
+    dispatch(
+      newAppointmentRequest(dayjs(date).toISOString())
+    );
+  };
   return (
     <>
       <DatePicker
         showTime={{ minuteStep: 30 }}
         format="YYYY-MM-DD HH:mm"
-        disabledTime={disabledDateTimeRange(
-          availability?.[0],
-          availability?.[1]
-        )}
+        disabledDate={disabledDate}
+        disabledTime={() => getDisabledHours()}
+        onChange={(date) => chosenDate(date)}
       />
     </>
   );

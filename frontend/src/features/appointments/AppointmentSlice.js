@@ -26,6 +26,24 @@ export const getAvailableTimes = createAsyncThunk(
     }
   }
 );
+export const newAppointmentRequest = createAsyncThunk(
+  "appointments/newAppointmentRequest",
+  async (date, thunkAPI) => {
+    try {
+      return await appointmentsService.newAppointmentRequest(
+        date
+      );
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const appointmentsSlice = createSlice({
   name: "appointments",

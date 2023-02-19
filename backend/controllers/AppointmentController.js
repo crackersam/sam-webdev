@@ -15,6 +15,15 @@ const getAvailability = async (req, res) => {
   }
 };
 
+const createAppointment = async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getAvailability,
+  createAppointment,
 };
