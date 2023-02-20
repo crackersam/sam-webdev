@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAppointments } from "../../features/admin/AdminSlice";
+import {
+  getAppointments,
+  rejectAppointment,
+  confirmAppointment,
+} from "../../features/admin/AdminSlice";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
@@ -13,12 +17,12 @@ const Appointments = () => {
     dispatch(getAppointments());
   }, [dispatch]);
 
-  const confirmAppointment = (id) => {
+  const confirmAppt = (id) => {
     dispatch(confirmAppointment(id));
     dispatch(getAppointments());
   };
-  const rejectAppointment = (id) => {
-    dispatch(rejectAppointment(id));
+  const rejectAppt = async (id) => {
+    await dispatch(rejectAppointment(id));
     dispatch(getAppointments());
   };
   return (
@@ -38,17 +42,13 @@ const Appointments = () => {
                 : "pending"}
               .{" "}
               <Link
-                onClick={() =>
-                  confirmAppointment(appointment._id)
-                }
+                onClick={() => confirmAppt(appointment._id)}
               >
                 Confirm
               </Link>
               /{" "}
               <Link
-                onClick={() =>
-                  rejectAppointment(appointment._id)
-                }
+                onClick={() => rejectAppt(appointment._id)}
               >
                 Reject
               </Link>

@@ -55,9 +55,9 @@ const getAppointments = async () => {
 };
 
 const rejectAppointment = async (id) => {
-  const response = await axios.put(
+  const response = await axios.delete(
     API_URL + "appointments",
-    { id },
+    { data: { id } },
     {
       withCredentials: true,
     }

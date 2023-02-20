@@ -145,8 +145,8 @@ const rejectAppointment = async (req, res) => {
         .status(404)
         .json({ message: "No appointment found." });
     }
-    appointment.status = "rejected";
-    await appointment.save();
+    await appointment.remove();
+
     return res
       .status(200)
       .json({ message: "Appointment rejected." });
@@ -165,12 +165,13 @@ const confirmAppointment = async (req, res) => {
     const appointment = await Appointment.findById(
       req.body.id
     );
+
     if (!appointment) {
       return res
         .status(404)
         .json({ message: "No appointment found." });
     }
-    appointment.status = "confirmed";
+    appointment.confirmed = true;
     await appointment.save();
     return res
       .status(200)

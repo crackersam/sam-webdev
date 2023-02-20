@@ -214,6 +214,33 @@ export const adminSlice = createSlice({
           state.isLoading = false;
           state.errorMessage = action.payload;
         }
+      )
+      .addCase(rejectAppointment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        rejectAppointment.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.successMessage = action.payload.message;
+        }
+      )
+      .addCase(
+        rejectAppointment.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload.message;
+        }
+      )
+      .addCase(confirmAppointment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        confirmAppointment.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.successMessage = action.payload.message;
+        }
       );
   },
 });

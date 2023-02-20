@@ -39,7 +39,7 @@ router.get("/appointments", auth, getAppointments);
 // @route PUT api/admin/appointments
 // @desc Rejects appointment
 // @access Private
-router.put("/appointments", auth, rejectAppointment);
+router.delete("/appointments", auth, rejectAppointment);
 
 // @route PUT api/admin/appointments
 // @desc Approves appointment
