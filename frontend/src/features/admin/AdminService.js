@@ -44,9 +44,44 @@ const getAvailability = async () => {
   return response.data;
 };
 
+const getAppointments = async () => {
+  const response = await axios.get(
+    API_URL + "appointments",
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+const rejectAppointment = async (id) => {
+  const response = await axios.put(
+    API_URL + "appointments",
+    { id },
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+const confirmAppointment = async (id) => {
+  const response = await axios.put(
+    API_URL + "appointments",
+    { id },
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
 export default {
   getUsersAndFiles,
   downloadFile,
   updateAvailability,
   getAvailability,
+  getAppointments,
+  rejectAppointment,
+  confirmAppointment,
 };

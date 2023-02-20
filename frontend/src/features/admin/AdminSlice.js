@@ -72,6 +72,54 @@ export const getAvailability = createAsyncThunk(
   }
 );
 
+export const getAppointments = createAsyncThunk(
+  "admin/getAppointments",
+  async (_, thunkAPI) => {
+    try {
+      return await adminService.getAppointments();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const rejectAppointment = createAsyncThunk(
+  "admin/rejectAppointment",
+  async (data, thunkAPI) => {
+    try {
+      return await adminService.rejectAppointment(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const confirmAppointment = createAsyncThunk(
+  "admin/confirmAppointment",
+  async (data, thunkAPI) => {
+    try {
+      return await adminService.confirmAppointment(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -148,6 +196,23 @@ export const adminSlice = createSlice({
           state.isLoading = false;
           state.errorMessage = action.payload;
           state.successMessage = "";
+        }
+      )
+      .addCase(getAppointments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        getAppointments.fulfilled,
+        (state, action) => {
+          state.isLoading = false;
+          state.appointments = action.payload.appointments;
+        }
+      )
+      .addCase(
+        getAppointments.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload;
         }
       );
   },

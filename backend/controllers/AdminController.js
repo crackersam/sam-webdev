@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const { Admin } = require("../models/UserModel");
+const User = require("../models/UserModel");
+const Appointment = require("../models/AppointmentModel");
 
 // init gfs
 let gfs;
@@ -94,6 +95,11 @@ const updateAvailability = async (req, res) => {
 };
 
 const getAvailability = async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
   try {
     const admin = await User.findOne({ admin: true });
     if (admin.availability.length !== 2) {
@@ -108,9 +114,78 @@ const getAvailability = async (req, res) => {
   }
 };
 
+const getAppointments = async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const appointments = await Appointment.find().populate(
+      "user"
+    );
+    return res.status(200).json({ appointments });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const rejectAppointment = async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const appointment = await Appointment.findById(
+      req.body.id
+    );
+    if (!appointment) {
+      return res
+        .status(404)
+        .json({ message: "No appointment found." });
+    }
+    appointment.status = "rejected";
+    await appointment.save();
+    return res
+      .status(200)
+      .json({ message: "Appointment rejected." });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const confirmAppointment = async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const appointment = await Appointment.findById(
+      req.body.id
+    );
+    if (!appointment) {
+      return res
+        .status(404)
+        .json({ message: "No appointment found." });
+    }
+    appointment.status = "confirmed";
+    await appointment.save();
+    return res
+      .status(200)
+      .json({ message: "Appointment confirmed." });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = {
   downloadFile,
   getListOfUsersAndAssets,
   updateAvailability,
   getAvailability,
+  getAppointments,
+  rejectAppointment,
+  confirmAppointment,
 };

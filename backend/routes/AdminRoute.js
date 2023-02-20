@@ -6,6 +6,9 @@ const {
   downloadFile,
   updateAvailability,
   getAvailability,
+  getAppointments,
+  rejectAppointment,
+  confirmAppointment,
 } = require("../controllers/AdminController");
 
 // @route GET api/admin/assets
@@ -26,6 +29,21 @@ router.put("/availability", auth, updateAvailability);
 // @route GET api/admin/availability
 // @desc Gets availability
 // @access Private
-router.get("/availability", getAvailability);
+router.get("/availability", auth, getAvailability);
+
+// @route GET api/admin/appointments
+// @desc Gets appointments
+// @access Private
+router.get("/appointments", auth, getAppointments);
+
+// @route PUT api/admin/appointments
+// @desc Rejects appointment
+// @access Private
+router.put("/appointments", auth, rejectAppointment);
+
+// @route PUT api/admin/appointments
+// @desc Approves appointment
+// @access Private
+router.put("/appointments", auth, confirmAppointment);
 
 module.exports = router;
