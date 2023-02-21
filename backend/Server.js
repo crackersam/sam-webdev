@@ -26,6 +26,11 @@ app.use(
   require("./routes/AppointmentRoute")
 );
 
+app.use(
+  "/api/documents",
+  require("./routes/DocumentRoute")
+);
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;

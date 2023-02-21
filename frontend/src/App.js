@@ -27,6 +27,8 @@ import RedirectLoggedIn from "./components/RedirectLoggedIn";
 import { useToast } from "./hooks/useToast";
 import Admin from "./pages/Admin";
 import Appointment from "./pages/Appointment";
+import Documents from "./pages/Documents";
+import NewDocument from "./pages/NewDocument";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] =
@@ -82,6 +84,14 @@ const App = () => {
               element={<Appointment />}
             />
           </Route>
+          <Route
+            element={<Documents />}
+            path="/documents"
+          />
+          <Route
+            element={<NewDocument />}
+            path="/documents/new"
+          />
           <Route element={<Protector admin={true} />}>
             <Route path="/admin" element={<Admin />} />
           </Route>

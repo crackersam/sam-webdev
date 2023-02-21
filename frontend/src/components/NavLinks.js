@@ -32,6 +32,9 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/logout">Logout</NavLink>
       </li>
+      <li>
+        <NavLink to="/documents">Documents</NavLink>
+      </li>
       {admin && (
         <li>
           <NavLink to="/admin">Admin</NavLink>
