@@ -8,12 +8,13 @@ const saveDocument = asyncHandler(async (req, res) => {
         "Please provide a title and content for the document"
       );
     }
-    const prevDoc = Document.findOne({
+    const prevDoc = await Document.findOne({
       title: req.body.title,
       user: req.user._id,
     });
-    if (prevDoc.content) {
-      prevDoc.content = req.body.rawContentState;
+
+    if (prevDoc) {
+      prevDoc.body = req.body.rawContentState;
       await prevDoc.save();
       return res.status(200).json({
         message: "Document updated successfully",
