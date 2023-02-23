@@ -20,6 +20,22 @@ export const saveDocument = createAsyncThunk(
   }
 );
 
+export const getMyDocuments = createAsyncThunk(
+  "documents/getMyDocuments",
+  async (thunkAPI) => {
+    try {
+      return await DocumentService.getMyDocuments();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const initialState = {
   successMessage: "",
   isLoading: false,
@@ -51,6 +67,23 @@ const documentSlice = createSlice({
       (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload.message;
+      }
+    );
+    builder.addCase(getMyDocuments.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      getMyDocuments.fulfilled,
+      (state, action) => {
+        state.isLoading = false;
+        state.documents = action.payload;
+      }
+    );
+    builder.addCase(
+      getMyDocuments.rejected,
+      (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
       }
     );
   },

@@ -9,4 +9,14 @@ const saveDocument = async (document) => {
   return response.data;
 };
 
-export default { saveDocument };
+const getMyDocuments = async () => {
+  const response = await axios.get(
+    API_URL + "my-documents",
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+export default { saveDocument, getMyDocuments };

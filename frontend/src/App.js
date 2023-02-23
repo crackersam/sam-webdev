@@ -28,7 +28,7 @@ import { useToast } from "./hooks/useToast";
 import Admin from "./pages/Admin";
 import Appointment from "./pages/Appointment";
 import Documents from "./pages/Documents";
-import NewDocument from "./pages/NewDocument";
+import NewOrEditDocument from "./pages/NewOrEditDocument";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] =
@@ -89,7 +89,7 @@ const App = () => {
             path="/documents"
           />
           <Route
-            element={<NewDocument />}
+            element={<NewOrEditDocument />}
             path="/documents/new"
           />
           <Route element={<Protector admin={true} />}>

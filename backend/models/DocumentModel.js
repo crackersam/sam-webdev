@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
-const DocumentSchema = new mongoose.Schema(
+const documentSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
+    },
+    slug: {
+      type: String,
     },
     body: {
       type: String,
@@ -19,6 +23,11 @@ const DocumentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Document = mongoose.model("Document", DocumentSchema);
+documentSchema.pre("save", function (next) {
+  this.slug = slugify(this.title, { lower: true });
+  next();
+});
+
+const Document = mongoose.model("Document", documentSchema);
 
 module.exports = Document;

@@ -35,4 +35,26 @@ const saveDocument = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { saveDocument };
+const getMyDocuments = asyncHandler(async (req, res) => {
+  try {
+    const documents = await Document.find({
+      user: req.user._id,
+    });
+
+    if (!documents) {
+      return res
+        .status(404)
+        .json({ message: "No documents found" });
+    }
+
+    const docs = documents.map((doc) => {
+      return { title: doc.title, slug: doc.slug };
+    });
+
+    return res.status(200).json(docs);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+module.exports = { saveDocument, getMyDocuments };

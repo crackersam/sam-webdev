@@ -7,7 +7,7 @@ import { EditorState } from "draft-js";
 import { useDispatch } from "react-redux";
 import { saveDocument } from "../features/documents/DocumentSlice";
 
-const NewDocument = () => {
+const NewOrEditDocument = () => {
   const [title, setTitle] = React.useState("");
   const [body, setBody] = useState(
     EditorState.createEmpty()
@@ -50,4 +50,4 @@ const NewDocument = () => {
   );
 };
 
-export default NewDocument;
+export default NewOrEditDocument;
