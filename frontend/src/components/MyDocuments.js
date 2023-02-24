@@ -16,7 +16,7 @@ const MyDocuments = () => {
         ? documents.map((doc) => {
             return (
               <p key={doc.slug}>
-                <Link to={`/documents/${doc.slug}`}>
+                <Link to={`/documents/edit/${doc.slug}`}>
                   {doc.title}
                 </Link>
               </p>

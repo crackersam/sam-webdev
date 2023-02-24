@@ -90,6 +90,10 @@ const App = () => {
           />
           <Route
             element={<NewOrEditDocument />}
+            path={`/documents/edit/:slug`}
+          />
+          <Route
+            element={<NewOrEditDocument />}
             path="/documents/new"
           />
           <Route element={<Protector admin={true} />}>

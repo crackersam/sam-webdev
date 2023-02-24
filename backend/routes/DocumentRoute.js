@@ -4,6 +4,8 @@ const protect = require("../middleware/AuthenticationMiddleware");
 const {
   saveDocument,
   getMyDocuments,
+  getDocument,
+  updateDocument,
 } = require("../controllers/DocumentController");
 
 // @route   POST api/documents
@@ -15,5 +17,12 @@ router.post("/", protect, saveDocument);
 // @desc    Get all documents for a user
 // @access  Private
 router.get("/my-documents", protect, getMyDocuments);
+
+// @route   GET api/documents/:slug
+// @desc    Get a document by slug
+// @access  Private
+router.get("/:slug", protect, getDocument);
+
+router.put("/:slug", protect, updateDocument);
 
 module.exports = router;

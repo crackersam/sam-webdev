@@ -36,6 +36,38 @@ export const getMyDocuments = createAsyncThunk(
   }
 );
 
+export const getDocument = createAsyncThunk(
+  "documents/getDocument",
+  async (slug, thunkAPI) => {
+    try {
+      return await DocumentService.getDocument(slug);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateDocument = createAsyncThunk(
+  "documents/updateDocument",
+  async (document, thunkAPI) => {
+    try {
+      return await DocumentService.updateDocument(document);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const initialState = {
   successMessage: "",
   isLoading: false,
@@ -84,6 +116,40 @@ const documentSlice = createSlice({
       (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
+      }
+    );
+    builder.addCase(getDocument.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      getDocument.fulfilled,
+      (state, action) => {
+        state.isLoading = false;
+        state.document = action.payload;
+      }
+    );
+    builder.addCase(
+      getDocument.rejected,
+      (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      }
+    );
+    builder.addCase(updateDocument.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      updateDocument.fulfilled,
+      (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message;
+      }
+    );
+    builder.addCase(
+      updateDocument.rejected,
+      (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.message;
       }
     );
   },

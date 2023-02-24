@@ -4,22 +4,56 @@ import { Editor } from "react-draft-wysiwyg";
 import { convertFromRaw, convertToRaw } from "draft-js";
 import "./../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
-import { useDispatch } from "react-redux";
-import { saveDocument } from "../features/documents/DocumentSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  saveDocument,
+  getDocument,
+  updateDocument,
+} from "../features/documents/DocumentSlice";
+import { useParams } from "react-router-dom";
 
 const NewOrEditDocument = () => {
   const [title, setTitle] = React.useState("");
   const [body, setBody] = useState(
     EditorState.createEmpty()
   );
+  const { document } = useSelector((state) => state.doc);
   const dispatch = useDispatch();
+  const slug = useParams().slug;
+
+  useEffect(() => {
+    if (slug && !document) {
+      dispatch(getDocument(slug));
+    }
+    if (document) {
+      setTitle(document.title);
+      setBody(
+        EditorState.createWithContent(
+          convertFromRaw(JSON.parse(document.body))
+        )
+      );
+    }
+  }, [slug, document, dispatch]);
 
   const handleSave = (e) => {
     e.preventDefault();
-    const rawContentState = JSON.stringify(
-      convertToRaw(body.getCurrentContent())
-    );
-    dispatch(saveDocument({ title, rawContentState }));
+    if (!slug) {
+      const rawContentState = JSON.stringify(
+        convertToRaw(body.getCurrentContent())
+      );
+      dispatch(saveDocument({ title, rawContentState }));
+    } else {
+      const rawContentState = JSON.stringify(
+        convertToRaw(body.getCurrentContent())
+      );
+      dispatch(
+        updateDocument({
+          title,
+          slug,
+          rawContentState,
+        })
+      );
+    }
   };
 
   return (

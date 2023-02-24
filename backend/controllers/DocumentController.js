@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Document = require("../models/DocumentModel");
+const slugify = require("slugify");
 
 const saveDocument = asyncHandler(async (req, res) => {
   try {
@@ -8,16 +9,16 @@ const saveDocument = asyncHandler(async (req, res) => {
         "Please provide a title and content for the document"
       );
     }
+
     const prevDoc = await Document.findOne({
-      title: req.body.title,
+      slug: slugify(req.body.title, { lower: true }),
       user: req.user._id,
     });
 
     if (prevDoc) {
-      prevDoc.body = req.body.rawContentState;
-      await prevDoc.save();
-      return res.status(200).json({
-        message: "Document updated successfully",
+      return res.status(400).json({
+        message:
+          "You already have a document with this title",
       });
     }
 
@@ -57,4 +58,54 @@ const getMyDocuments = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { saveDocument, getMyDocuments };
+const getDocument = asyncHandler(async (req, res) => {
+  try {
+    const document = await Document.findOne({
+      slug: req.params.slug,
+      user: req.user._id,
+    });
+
+    if (!document) {
+      return res
+        .status(404)
+        .json({ message: "No document found" });
+    }
+
+    return res.status(200).json(document);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+const updateDocument = asyncHandler(async (req, res) => {
+  try {
+    const document = await Document.findOne({
+      slug: req.params.slug,
+      user: req.user._id,
+    });
+
+    if (!document) {
+      return res
+        .status(404)
+        .json({ message: "No document found" });
+    }
+
+    document.title = req.body.title;
+    document.body = req.body.rawContentState;
+
+    await document.save();
+
+    return res
+      .status(200)
+      .json({ message: "Document updated successfully" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+module.exports = {
+  saveDocument,
+  getMyDocuments,
+  getDocument,
+  updateDocument,
+};
