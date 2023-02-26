@@ -120,6 +120,22 @@ export const confirmAppointment = createAsyncThunk(
   }
 );
 
+export const getDocuments = createAsyncThunk(
+  "admin/getDocuments",
+  async (_, thunkAPI) => {
+    try {
+      return await adminService.getDocuments();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -241,7 +257,25 @@ export const adminSlice = createSlice({
           state.isLoading = false;
           state.successMessage = action.payload.message;
         }
-      );
+      )
+      .addCase(
+        confirmAppointment.rejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.errorMessage = action.payload.message;
+        }
+      )
+      .addCase(getDocuments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getDocuments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.documents = action.payload.docs;
+      })
+      .addCase(getDocuments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      });
   },
 });
 export const { resetAdmin } = adminSlice.actions;

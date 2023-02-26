@@ -75,6 +75,13 @@ const confirmAppointment = async (id) => {
   );
   return response.data;
 };
+const getDocuments = async () => {
+  const response = await axios.get(API_URL + "documents", {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
 
 export default {
   getUsersAndFiles,
@@ -84,4 +91,5 @@ export default {
   getAppointments,
   rejectAppointment,
   confirmAppointment,
+  getDocuments,
 };

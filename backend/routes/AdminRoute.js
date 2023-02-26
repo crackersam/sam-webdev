@@ -9,6 +9,7 @@ const {
   getAppointments,
   rejectAppointment,
   confirmAppointment,
+  getDocuments,
 } = require("../controllers/AdminController");
 
 // @route GET api/admin/assets
@@ -45,5 +46,10 @@ router.delete("/appointments", auth, rejectAppointment);
 // @desc Approves appointment
 // @access Private
 router.put("/appointments", auth, confirmAppointment);
+
+// @route GET api/admin/documents
+// @desc Gets documents
+// @access Private
+router.get("/documents", auth, getDocuments);
 
 module.exports = router;

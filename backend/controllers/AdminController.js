@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const User = require("../models/UserModel");
 const Appointment = require("../models/AppointmentModel");
+const Document = require("../models/DocumentModel");
+const asyncHandler = require("express-async-handler");
 
 // init gfs
 let gfs;
@@ -181,6 +183,50 @@ const confirmAppointment = async (req, res) => {
   }
 };
 
+const getDocuments = asyncHandler(async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const documents = await Document.find().populate(
+      "user"
+    );
+
+    const articlesByAuthor = {};
+
+    // Use a for...of loop to iterate over each document in the array
+    for (const doc of documents) {
+      // Get the author's email address from the document
+      const email = doc.user.email;
+
+      // If we haven't seen this author before, add them to the object with an empty array of articles
+      if (!articlesByAuthor[email]) {
+        articlesByAuthor[email] = [];
+      }
+
+      // Add the current document to the author's array of articles
+      articlesByAuthor[email].push({
+        title: doc.title,
+
+        body: doc.body,
+      });
+    }
+
+    // Create an array of author objects from the articlesByAuthor object
+    const docs = [];
+
+    for (const email in articlesByAuthor) {
+      docs.push({ [email]: articlesByAuthor[email] });
+    }
+
+    return res.status(200).json({ docs });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 module.exports = {
   downloadFile,
   getListOfUsersAndAssets,
@@ -189,4 +235,5 @@ module.exports = {
   getAppointments,
   rejectAppointment,
   confirmAppointment,
+  getDocuments,
 };
