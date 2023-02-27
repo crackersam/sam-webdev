@@ -136,6 +136,38 @@ export const getDocuments = createAsyncThunk(
   }
 );
 
+export const getPayments = createAsyncThunk(
+  "admin/getPayments",
+  async (_, thunkAPI) => {
+    try {
+      return await adminService.getPayments();
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createPayment = createAsyncThunk(
+  "admin/createPayment",
+  async (data, thunkAPI) => {
+    try {
+      return await adminService.createPayment(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -275,6 +307,28 @@ export const adminSlice = createSlice({
       .addCase(getDocuments.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
+      })
+      .addCase(getPayments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPayments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.payments = action.payload.pay;
+      })
+      .addCase(getPayments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.message;
+      })
+      .addCase(createPayment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createPayment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(createPayment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.message;
       });
   },
 });

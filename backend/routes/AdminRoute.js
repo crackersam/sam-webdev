@@ -10,6 +10,8 @@ const {
   rejectAppointment,
   confirmAppointment,
   getDocuments,
+  createPayment,
+  getPayments,
 } = require("../controllers/AdminController");
 
 // @route GET api/admin/assets
@@ -51,5 +53,15 @@ router.put("/appointments", auth, confirmAppointment);
 // @desc Gets documents
 // @access Private
 router.get("/documents", auth, getDocuments);
+
+// @route GET api/admin/payments
+// @desc Gets payments
+// @access Private
+router.get("/payments", auth, getPayments);
+
+// @route POST api/admin/payments
+// @desc Creates payment
+// @access Private
+router.post("/payments", auth, createPayment);
 
 module.exports = router;

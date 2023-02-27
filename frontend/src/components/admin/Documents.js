@@ -14,23 +14,26 @@ const Documents = () => {
   return (
     <>
       {documents &&
-        documents.map((docs, i) => {
+        documents.map((doc, i) => {
+          const userKey = Object.keys(doc)[0];
           return (
             <div key={i}>
-              <h2>{Object.keys(docs)[i]}</h2>
-
-              {docs[Object.keys(docs)[i]].map((doc, j) => {
-                return (
-                  <React.Fragment key={j}>
-                    <p key={j}>{doc.title}</p>
-                    <article>
-                      {ReactHtmlParser(
-                        draftToHtml(JSON.parse(doc.body))
-                      )}
-                    </article>
-                  </React.Fragment>
-                );
-              })}
+              <h2>{userKey}</h2>
+              {doc[userKey] &&
+                doc[userKey].map((docItem, j) => {
+                  return (
+                    <React.Fragment key={j}>
+                      <p>{docItem.title}</p>
+                      <article>
+                        {ReactHtmlParser(
+                          draftToHtml(
+                            JSON.parse(docItem.body)
+                          )
+                        )}
+                      </article>
+                    </React.Fragment>
+                  );
+                })}
             </div>
           );
         })}

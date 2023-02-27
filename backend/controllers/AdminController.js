@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/UserModel");
 const Appointment = require("../models/AppointmentModel");
 const Document = require("../models/DocumentModel");
+const Payment = require("../models/PaymentModel");
 const asyncHandler = require("express-async-handler");
 
 // init gfs
@@ -227,6 +228,69 @@ const getDocuments = asyncHandler(async (req, res) => {
   }
 });
 
+const createPayment = asyncHandler(async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const user = await User.findOne({
+      email: req.body.email,
+    });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "No user found." });
+    }
+    const payment = await new Payment({
+      user: user._id,
+      order: req.body.order,
+      amount: req.body.amount,
+    });
+    await payment.save();
+    return res
+      .status(200)
+      .json({ message: "Payment created." });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+const getPayments = asyncHandler(async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const payments = await Payment.find().populate("user");
+    const users = await User.find();
+
+    const paymentsByUser = {};
+    for (user of users) {
+      paymentsByUser[user.email] = [];
+    }
+    for (const payment of payments) {
+      const email = payment.user.email;
+      paymentsByUser[email].push({
+        order: payment.order,
+        amount: payment.amount,
+        paid: payment.paid,
+        id: payment._id,
+      });
+    }
+    const pay = [];
+    for (const email in paymentsByUser) {
+      pay.push({ [email]: paymentsByUser[email] });
+    }
+
+    return res.status(200).json({ pay });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = {
   downloadFile,
   getListOfUsersAndAssets,
@@ -236,4 +300,6 @@ module.exports = {
   rejectAppointment,
   confirmAppointment,
   getDocuments,
+  createPayment,
+  getPayments,
 };

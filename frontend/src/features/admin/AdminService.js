@@ -83,7 +83,27 @@ const getDocuments = async () => {
   return response.data;
 };
 
-export default {
+const getPayments = async () => {
+  const response = await axios.get(API_URL + "payments", {
+    withCredentials: true,
+  });
+
+  return response.data;
+};
+
+const createPayment = async (data) => {
+  const response = await axios.post(
+    API_URL + "payments",
+    data,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+const defaultExport = {
   getUsersAndFiles,
   downloadFile,
   updateAvailability,
@@ -92,4 +112,7 @@ export default {
   rejectAppointment,
   confirmAppointment,
   getDocuments,
+  getPayments,
+  createPayment,
 };
+export default defaultExport;

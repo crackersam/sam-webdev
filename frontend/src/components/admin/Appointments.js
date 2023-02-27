@@ -41,17 +41,25 @@ const Appointments = () => {
                 ? "confirmed"
                 : "pending"}
               .{" "}
-              <Link
-                onClick={() => confirmAppt(appointment._id)}
-              >
-                Confirm
-              </Link>
-              /{" "}
-              <Link
-                onClick={() => rejectAppt(appointment._id)}
-              >
-                Reject
-              </Link>
+              {!appointment.confirmed &&
+                (
+                  <Link
+                    onClick={() =>
+                      confirmAppt(appointment._id)
+                    }
+                  >
+                    Confirm
+                  </Link>
+                ) /
+                  (
+                    <Link
+                      onClick={() =>
+                        rejectAppt(appointment._id)
+                      }
+                    >
+                      Reject
+                    </Link>
+                  )}
             </p>
           );
         })}
