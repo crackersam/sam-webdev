@@ -168,6 +168,22 @@ export const createPayment = createAsyncThunk(
   }
 );
 
+export const deletePayment = createAsyncThunk(
+  "admin/deletePayment",
+  async (data, thunkAPI) => {
+    try {
+      return await adminService.deletePayment(data);
+    } catch (error) {
+      const message =
+        (error.response && error.response.data) ||
+        error.response.data.message ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const adminSlice = createSlice({
   name: "admin",
   initialState,
@@ -327,6 +343,17 @@ export const adminSlice = createSlice({
         state.successMessage = action.payload.message;
       })
       .addCase(createPayment.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.message;
+      })
+      .addCase(deletePayment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deletePayment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message;
+      })
+      .addCase(deletePayment.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload.message;
       });

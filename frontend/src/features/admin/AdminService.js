@@ -103,6 +103,18 @@ const createPayment = async (data) => {
   return response.data;
 };
 
+const deletePayment = async (id) => {
+  const response = await axios.delete(
+    API_URL + "payments",
+    { data: { id } },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 const defaultExport = {
   getUsersAndFiles,
   downloadFile,
@@ -114,5 +126,6 @@ const defaultExport = {
   getDocuments,
   getPayments,
   createPayment,
+  deletePayment,
 };
 export default defaultExport;

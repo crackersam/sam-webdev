@@ -291,6 +291,34 @@ const getPayments = asyncHandler(async (req, res) => {
   }
 });
 
+const deletePayment = asyncHandler(async (req, res) => {
+  if (!req.user.admin) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized." });
+  }
+  try {
+    const payment = await Payment.findById(req.body.id);
+    if (!payment) {
+      return res
+        .status(404)
+        .json({ message: "No payment found." });
+    }
+    if (payment.paid) {
+      return res
+        .status(400)
+        .json({ message: "Payment already paid." });
+    }
+    await payment.remove();
+
+    return res
+      .status(200)
+      .json({ message: "Payment deleted." });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = {
   downloadFile,
   getListOfUsersAndAssets,
@@ -302,4 +330,5 @@ module.exports = {
   getDocuments,
   createPayment,
   getPayments,
+  deletePayment,
 };

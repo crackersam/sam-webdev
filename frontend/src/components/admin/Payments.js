@@ -1,6 +1,9 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPayments } from "../../features/admin/AdminSlice";
+import {
+  getPayments,
+  deletePayment,
+} from "../../features/admin/AdminSlice";
 import CreatePayment from "./CreatePayment";
 
 const Payments = () => {
@@ -30,6 +33,17 @@ const Payments = () => {
                         {payment.order}, £{payment.amount},{" "}
                         {payment.paid ? "paid" : "unpaid"},
                         ID: {payment.id}
+                        {payment.paid ? null : (
+                          <button
+                            onClick={() =>
+                              dispatch(
+                                deletePayment(payment.id)
+                              )
+                            }
+                          >
+                            Delete
+                          </button>
+                        )}
                       </p>
                     </Fragment>
                   );

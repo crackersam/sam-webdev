@@ -31,6 +31,8 @@ app.use(
   require("./routes/DocumentRoute")
 );
 
+app.use("/api/payments", require("./routes/PaymentRoute"));
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;

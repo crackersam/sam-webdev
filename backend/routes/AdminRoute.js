@@ -12,6 +12,7 @@ const {
   getDocuments,
   createPayment,
   getPayments,
+  deletePayment,
 } = require("../controllers/AdminController");
 
 // @route GET api/admin/assets
@@ -63,5 +64,10 @@ router.get("/payments", auth, getPayments);
 // @desc Creates payment
 // @access Private
 router.post("/payments", auth, createPayment);
+
+// @route DELETE api/admin/payments
+// @desc Deletes payment
+// @access Private
+router.delete("/payments", auth, deletePayment);
 
 module.exports = router;
