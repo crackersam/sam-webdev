@@ -48,7 +48,9 @@ export const useToast = () => {
     }
     if (successMessagePayments) {
       toast.success(successMessagePayments);
-      dispatch(resetPayments());
+      setTimeout(() => {
+        dispatch(resetPayments());
+      }, 3000);
     }
     if (errorMessageDocuments) {
       toast.error(errorMessageDocuments);

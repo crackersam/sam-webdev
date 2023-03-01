@@ -25,7 +25,7 @@ const CreatePayment = ({ email }) => {
     <form onSubmit={handleSubmit}>
       <input type="text" name="order" placeholder="Order" />
       <input
-        type="text"
+        type="number"
         name="amount"
         placeholder="Amount"
       />
