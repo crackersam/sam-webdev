@@ -45,7 +45,6 @@ const PaymentForm = ({ setModalIsOpen, paymentId }) => {
       paymentIntent &&
       paymentIntent.status === "succeeded"
     ) {
-      setMessage("Payment succeeded!");
       setModalIsOpen(false);
       dispatch(successfulPayment(paymentId));
     }
