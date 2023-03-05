@@ -40,6 +40,8 @@ app.use(
 
 app.use("/api/payments", require("./routes/PaymentRoute"));
 
+app.use("/api/calls", require("./routes/CallRoute"));
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;

@@ -50,7 +50,9 @@ export const useToast = () => {
   useEffect(() => {
     if (errorMessageCall) {
       toast.error(errorMessageCall);
-      dispatch(resetCall());
+      setTimeout(() => {
+        dispatch(resetCall());
+      }, 3000);
     }
     if (successMessageCall) {
       toast.success(successMessageCall);
@@ -76,11 +78,15 @@ export const useToast = () => {
     }
     if (successMessageAppointments) {
       toast.success(successMessageAppointments);
-      dispatch(resetAppointments());
+      setTimeout(() => {
+        dispatch(resetAppointments());
+      }, 3000);
     }
     if (errorMessageAppointments) {
       toast.error(errorMessageAppointments);
-      dispatch(resetAppointments());
+      setTimeout(() => {
+        dispatch(resetAppointments());
+      }, 3000);
     }
     if (errorMessageAssets) {
       toast.error(errorMessageAssets);

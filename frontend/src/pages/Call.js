@@ -1,11 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import io from "socket.io-client";
 import { useSelector, useDispatch } from "react-redux";
-import { error, success } from "../features/call/CallSlice";
+import { allowedToCall } from "../features/call/CallSlice";
 import { useNavigate } from "react-router-dom";
 
 const Call = () => {
-  const { email } = useSelector((state) => state.auth);
+  const { successMessage, errorMessage } = useSelector(
+    (state) => state.call
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userVideo = useRef();
@@ -15,65 +22,58 @@ const Call = () => {
   const otherUser = useRef();
   const userStream = useRef();
   const [waiting, setWaiting] = useState(false);
+  let [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!email) {
-      return navigate("/login");
-    }
-    socketRef.current = io();
-    socketRef.current.emit("join", email);
+    dispatch(allowedToCall());
+  }, []);
 
-    socketRef.current.on("error", () => {
-      dispatch(
-        error("Please request an appointment first")
-      );
-      return navigate("/appointments");
-    });
-
+  useEffect(() => {
     const configuration = async () => {
-      userStream.current =
-        await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: true,
+      if (count < 1) {
+        userStream.current =
+          await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+          });
+        userVideo.current.srcObject = userStream.current;
+
+        socketRef.current = io();
+        socketRef.current.emit("join");
+
+        socketRef.current.on("otherUser", (userID) => {
+          callUser(userID);
+          otherUser.current = userID;
         });
-      userVideo.current.srcObject = userStream.current;
 
-      socketRef.current.on("otherUser", (userID) => {
-        callUser(userID);
-        otherUser.current = userID;
-      });
+        socketRef.current.on("userJoined", (userID) => {
+          setWaiting(false);
+          otherUser.current = userID;
+        });
 
-      socketRef.current.on("userJoined", (userID) => {
-        setWaiting(false);
-        otherUser.current = userID;
-      });
+        socketRef.current.on("offer", handleRecieveCall);
 
-      socketRef.current.on("offer", handleRecieveCall);
+        socketRef.current.on("answer", handleAnswer);
 
-      socketRef.current.on("answer", handleAnswer);
-
-      socketRef.current.on(
-        "ice-candidate",
-        handleNewICECandidateMsg
-      );
+        socketRef.current.on(
+          "ice-candidate",
+          handleNewICECandidateMsg
+        );
+        setCount(count + 1);
+      }
     };
 
-    socketRef.current.on("permission granted", () => {
-      dispatch(success("Connecting..."));
+    if (successMessage) {
       configuration();
-    });
-    socketRef.current.on("waiting", () => {
-      dispatch(success("Waiting for other user..."));
-      setWaiting(true);
-    });
-  }, [
-    socketRef,
-    userVideo,
-    partnerVideo,
-    dispatch,
-    navigate,
-    email,
-  ]);
+      return;
+    }
+    if (errorMessage) {
+      setTimeout(() => {
+        navigate("/appointments");
+      }, 3000);
+      return;
+    }
+  }, [successMessage, errorMessage, dispatch, navigate]);
 
   const callUser = (userID) => {
     peerRef.current = createPeer(userID);
