@@ -5,7 +5,14 @@ const {
 } = require("./middleware/ErrorHandlerMiddleware");
 require("dotenv").config();
 const { connectDB } = require("./config/db");
+const http = require("http");
 const app = express();
+
+// socketio
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+require("./utils/socket")(io);
 
 require("./utils/sendMail");
 
@@ -37,6 +44,6 @@ app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () =>
+server.listen(port, () =>
   console.log(`Server running on port ${port}`)
 );

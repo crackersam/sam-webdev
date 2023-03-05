@@ -30,6 +30,7 @@ import Appointment from "./pages/Appointment";
 import Documents from "./pages/Documents";
 import NewOrEditDocument from "./pages/NewOrEditDocument";
 import Payments from "./pages/Payments";
+import Call from "./pages/Call";
 
 const App = () => {
   const [drawerIsOpen, setDrawerIsOpen] =
@@ -98,6 +99,7 @@ const App = () => {
             path="/documents/new"
           />
           <Route path="/payments" element={<Payments />} />
+          <Route path="/call" element={<Call />} />
           <Route element={<Protector admin={true} />}>
             <Route path="/admin" element={<Admin />} />
           </Route>

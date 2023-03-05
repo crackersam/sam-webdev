@@ -5,6 +5,7 @@ import AdminReducer from "../features/admin/AdminSlice";
 import AppointmentReducer from "../features/appointments/AppointmentSlice";
 import DocumentReducer from "../features/documents/DocumentSlice";
 import PaymentReducer from "../features/payments/PaymentSlice";
+import CallReducer from "../features/call/CallSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     appt: AppointmentReducer,
     doc: DocumentReducer,
     pay: PaymentReducer,
+    call: CallReducer,
   },
 });

@@ -7,9 +7,15 @@ import { resetAdmin } from "../features/admin/AdminSlice";
 import { reset as resetAppointments } from "../features/appointments/AppointmentSlice";
 import { reset as resetDocuments } from "../features/documents/DocumentSlice";
 import { reset as resetPayments } from "../features/payments/PaymentSlice";
+import { reset as resetCall } from "../features/call/CallSlice";
 
 export const useToast = () => {
   const dispatch = useDispatch();
+
+  const {
+    errorMessage: errorMessageCall,
+    successMessage: successMessageCall,
+  } = useSelector((state) => state.call);
 
   const {
     errorMessage: errorMessageDocuments,
@@ -42,6 +48,14 @@ export const useToast = () => {
   } = useSelector((state) => state.pay);
 
   useEffect(() => {
+    if (errorMessageCall) {
+      toast.error(errorMessageCall);
+      dispatch(resetCall());
+    }
+    if (successMessageCall) {
+      toast.success(successMessageCall);
+      dispatch(resetCall());
+    }
     if (errorMessagePayments) {
       toast.error(errorMessagePayments);
       dispatch(resetPayments());
@@ -105,6 +119,8 @@ export const useToast = () => {
     successMessageDocuments,
     errorMessagePayments,
     successMessagePayments,
+    errorMessageCall,
+    successMessageCall,
   ]);
   return null;
 };

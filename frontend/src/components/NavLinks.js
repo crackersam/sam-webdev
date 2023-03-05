@@ -38,6 +38,9 @@ const MainNavigation = () => {
       <li>
         <NavLink to="/payments">Payments</NavLink>
       </li>
+      <li>
+        <NavLink to="/call">Call</NavLink>
+      </li>
       {admin && (
         <li>
           <NavLink to="/admin">Admin</NavLink>
